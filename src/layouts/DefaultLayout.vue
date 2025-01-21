@@ -1,8 +1,8 @@
 <template>
-  <div class="flex w-full h-screen bg-slate-800 font-roboto">
+  <div class="flex w-full h-screen bg-slate-800">
     <Sidebar :sidebarOpen="sidebarOpen" class="z-100" />
 
-    <div class="flex flex-1 flex-col overflow-hidden">
+    <div class="relative flex flex-1 flex-col overflow-hidden">
       <Header :sidebarOpen="sidebarOpen" @toggleSidebar="toggleSidebar" />
 
       <div class="flex-1 overflow-x-hidden dark:bg-black bg-slate-200 z-2">

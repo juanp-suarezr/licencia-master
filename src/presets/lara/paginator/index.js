@@ -11,8 +11,8 @@ export default {
       'border-0',
 
       // Color
-      'bg-surface-0 dark:bg-surface-800',
-      'text-surface-500 dark:text-white/60',
+      'bg-transparent',
+      'text-graydark dark:text-gray',
     ],
   },
   firstpagebutton: ({ context }) => ({
@@ -23,18 +23,18 @@ export default {
       'inline-flex items-center justify-center',
 
       // Shape
-      'border-0 rounded-full dark:rounded-md',
+      'border-0 rounded-full rounded-md',
 
       // Size
       'min-w-[3rem] h-12 m-[0.143rem]',
       'leading-none',
 
       // Color
-      'text-surface-500 dark:text-white/60',
+      'text-graydark dark:text-graydark',
 
       // State
       {
-        'hover:bg-surface-50 dark:hover:bg-surface-700/70': !context.disabled,
+        'hover:bg-graydark dark:hover:bg-gray': !context.disabled,
         'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50':
           !context.disabled,
       },
@@ -62,7 +62,7 @@ export default {
       'leading-none',
 
       // Color
-      'text-surface-500 dark:text-white/60',
+      'text-graydark dark:text-graydark',
 
       // State
       {
@@ -94,7 +94,7 @@ export default {
       'leading-none',
 
       // Color
-      'text-surface-500 dark:text-white/60',
+      'text-graydark dark:text-graydark',
 
       // State
       {
@@ -321,7 +321,7 @@ export default {
         // Color
         { 'text-surface-700 dark:text-white/80': !context.focused && !context.selected },
         {
-          'bg-surface-50 dark:bg-surface-600/60 text-surface-700 dark:text-white/80':
+          'bg-graydar dark:bg-surface-600/60 text-surface-700 dark:text-white/80':
             context.focused && !context.selected,
         },
         {

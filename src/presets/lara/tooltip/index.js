@@ -50,8 +50,8 @@ export default {
   text: {
     class: [
       'p-3',
-      'bg-surface-600 dark:bg-surface-700',
-      'text-white',
+      'bg-white dark:bg-surface-700',
+      'dark:text-white text-black',
       'leading-none',
       'rounded-md',
       'whitespace-pre-line',

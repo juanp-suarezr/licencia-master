@@ -11,13 +11,13 @@
 
       <button @click="toggleDropdown" class="dark:text-white text-graydark focus:outline-none">
 
-        <Avatar class="w-16 h-16 bg-[#025db2] p-1 dark:hidden" :image="userWhite" shape="circle" />
-        <Avatar class="w-16 h-16 dark:bg-gray p-1 hidden dark:block" :image="userIcon" shape="circle" />
+        <Avatar class="w-16 h-16 p-1 dark:hidden" :image="userWhite" shape="circle" />
+        <Avatar class="w-16 h-16 p-1 hidden dark:block" :image="userIcon" shape="circle" />
       </button>
       <div v-if="dropdownOpen"
         class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg py-1 z-100">
         <div class="flex gap-2 px-4 py-2 items-center border-b-2 dark:border-slate-600 border-gray">
-          <Avatar class="w-16 h-16 bg-[#025db2] p-1 dark:hidden" :image="userWhite" shape="circle" />
+          <Avatar class="w-16 h-16 p-1 dark:hidden" :image="userWhite" shape="circle" />
           <Avatar class="w-16 h-16 dark:bg-gray p-1 hidden dark:block" :image="userIcon" shape="circle" />
           <div class="dark:text-white text-graydark flex flex-col items-center">
             <p v-if="isAuthenticated">{{ user?.name }}</p>

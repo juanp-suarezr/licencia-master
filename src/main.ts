@@ -13,17 +13,22 @@ import Traduccion from './lang/en/prime_en.json'
 import './plugins/axios'
 import './assets/main.css'
 import './assets/satoshi.css'
-import Tooltip from 'primevue/tooltip';
+import Tooltip from 'primevue/tooltip'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
 
-
+const pinia = createPinia()
 
 const app = createApp(App)
 
-app.use(createPinia())
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 app.use(LoadingPlugin)
 app.use(router)
 app.use(store)
-app.directive('tooltip', Tooltip);
+app.directive('tooltip', Tooltip)
+app.use(VueAwesomePaginate)
 app.use(PrimeVue, {
   unstyled: true,
   pt: Lara,

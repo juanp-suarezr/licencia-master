@@ -3,20 +3,13 @@ import { defineStore } from 'pinia'
 import axios from '../plugins/axios'
 
 export const useUserStore = defineStore('user_auth', {
-  persist: {
-    enabled: true,  // Habilitar la persistencia
-    strategies: [
-      {
-        key: 'user_auth', // Clave en localStorage o sessionStorage
-        storage: localStorage, // Puedes cambiar a localStorage si prefieres
-      },
-    ],
-  },
-  state: () => ({
-    isAuthenticated: false,
-    user: null,
-    error_user: null,
-  }),
+  persist: true,
+    state: () => ({
+        isAuthenticated: false,
+        user: null,
+        error_user: null,
+
+    }),
   actions: {
     async login(credentials) {
       try {
@@ -33,7 +26,6 @@ export const useUserStore = defineStore('user_auth', {
 
 
         sessionStorage.setItem('access_token', accessToken)
-        sessionStorage.setItem('id_user', id_user)
         sessionStorage.setItem('id_user', id_user)
         this.user = response.data.user_info
         this.isAuthenticated = true

@@ -47,11 +47,13 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import axios from '../plugins/axios'
+import axios from '../../plugins/axios'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/auth'
+import { useDarkModeStore } from '@/store/darkMode'
 
 const userStore = useUserStore()
+const darkModeStore = useDarkModeStore()
 
 const login = ref({
     email: 'AZProyects@gmail.com',
