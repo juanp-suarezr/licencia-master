@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Usuarios from '../views/usuarios/usuarios.vue'
 import Clientes from '../views/usuarios/clientes/index.vue'
+import ClientesCreate from '../views/usuarios/clientes/add.vue'
 import Login from '../views/auth/Login.vue'
 
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
       { path: '', name: 'Dashboard', title: 'Dashboard', component: Dashboard },
       { path: 'usuarios', name: 'Usuarios', title: 'Usuarios', component: Usuarios },
       { path: 'clientes', name: 'Clientes', title: 'Clientes', meta: 'clientes', component: Clientes },
+      { path: 'clientes/create', name: 'ClientesCreate', title: 'Nuevo Cliente', meta: 'clientes', component: ClientesCreate },
     ],
     meta: { requiresAuth: true },
   },

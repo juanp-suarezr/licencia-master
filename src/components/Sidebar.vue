@@ -14,7 +14,7 @@
       <ul class="space-y-2">
         <li>
           <router-link to="/" class="block px-4 py-2 text-white hover:!bg-slate-600"
-            :class="{ '!bg-slate-600': isActive('/') }">
+            :class="{ '!bg-slate-600': isActiveDashboard('/') }">
             Dashboard
           </router-link>
         </li>
@@ -31,7 +31,7 @@
       <ul>
       <li>
         <router-link to="/clientes" class="block px-4 py-2 text-white hover:!bg-slate-600"
-          :class="{ '!bg-slate-600': isActive('/clientes') }">
+          :class="{ '!bg-slate-600': isActive('/clientes')  }">
           Clientes
         </router-link>
       </li>
@@ -53,8 +53,11 @@ const { isAuthenticated, user, error_user } = storeToRefs(userStore);
 // Acceder a la ruta actual
 const route = useRoute();
 
-// Función para verificar si la ruta es activa
-const isActive = (path: string) => route.path === path;
+//funcion dashboard
+const isActiveDashboard = (path: string) => route.path === path;
+
+// Función para verificar si la ruta es activa o pertenece a un grupo de rutas
+const isActive = (path: string) => route.path.startsWith(path)
 
 // Props definidas directamente en script setup
 defineProps<{

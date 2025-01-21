@@ -1,19 +1,6 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- total usuarios -->
-    <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
-      <!-- info -->
-      <div class="w-full">
-        <h3 class="text-sm font-bold">Total de Usuarios</h3>
-        <p class="text-lg">{{ totalUsuarios }}</p>
-      </div>
-      <!-- icono -->
-      <div class="w-auto flex items-center justify-end">
-        <span class="bg-primary/20 shadow-lg p-2 rounded-md">
-          <UserGroupIcon class="h-6 w-6 text-primary/40" />
-        </span>
-      </div>
-    </div>
+  <div class="w-full">
+
     <!-- total clientes -->
     <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
       <!-- info -->
@@ -28,39 +15,18 @@
         </span>
       </div>
     </div>
-    <!-- total docentes -->
-    <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
-      <!-- info -->
-      <div class="w-full">
-        <h3 class="text-sm font-bold">Total de Docentes</h3>
-        <p class="text-lg">{{ totalDocentes }}</p>
-      </div>
-      <!-- icono -->
-      <div class="w-auto flex items-center justify-end">
-        <span class="bg-success/20 shadow-lg p-2 rounded-md">
-          <UserIcon class="h-6 w-6 text-success/40" />
-        </span>
-      </div>
-    </div>
-    <!-- total estudiantes -->
-    <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
-      <!-- info -->
-      <div class="w-full">
-        <h3 class="text-sm font-bold">Total de Estudiantes</h3>
-        <p class="text-lg">{{ totalEstudiantes }}</p>
-      </div>
-      <!-- icono -->
-      <div class="w-auto flex items-center justify-end">
-        <span class="bg-warning/20 shadow-lg p-2 rounded-md">
-          <UserIcon class="h-6 w-6 text-warning/40" />
-        </span>
-      </div>
-    </div>
+
+
   </div>
 
   <!-- tabla usuarios -->
   <div class="w-full mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
-    <h2 class="mt-2 px-4 text-base">Usuarios</h2>
+    <div class="flex flex-wrap justify-between items-center">
+    <h2 class="mt-2 px-4 text-base">Clientes</h2>
+    <a href="/clientes/create" class="p-2 hover:scale-105 dark:bg-primary/20 dark:text-white rounded-md shadow-md">
+          Nuevo cliente
+        </a>
+    </div>
     <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
       <div class="flex flex-wrap gap-2 mb-2">
 
@@ -74,12 +40,12 @@
           Limpiar
         </button>
       </div>
-      <select v-model="perPage" @change="fetchUsuarios"
+      <select v-model="perPage" @change="fetchUsuarios" v-if="totalClientes > 5"
         class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
-        <option v-if="totalUsuarios >= 5" :value="5">5</option>
-        <option v-if="totalUsuarios >= 10" :value="10">10</option>
-        <option v-if="totalUsuarios >= 15" :value="15">15</option>
-        <option v-if="totalUsuarios >= 20" :value="20">20</option>
+        <option  :value="5">5</option>
+        <option v-if="totalClientes >= 10" :value="10">10</option>
+        <option v-if="totalClientes >= 15" :value="15">15</option>
+        <option v-if="totalClientes >= 20" :value="20">20</option>
       </select>
     </div>
     <div class="overflow-x-auto mt-4">
@@ -97,32 +63,69 @@
               CORREO
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              ROL
+              DIRECCIÓN
+            </th>
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+              IDENTIFICACIÓN
+            </th>
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+              TELEFONO
+            </th>
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+              INSTITUCIÓN
+            </th>
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+              ACCIONES
             </th>
 
           </tr>
         </thead>
         <tbody v-if="usuarios.length != 0">
-          <tr v-for="(item, index) in usuarios" :key="index">
+          <tr v-for="(item, index) in usuarios" :key="index" class="text-sm">
             <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray">
+              <h5 class="font-medium text-graydark dark:text-gray text-sm">
                 {{ index + 1 }}
               </h5>
             </td>
-            <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray">
-                {{ item.name }}
+            <td class="py-3 px-3 whitespace-normal break-words text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.nombre }} {{ item.apellidos }}
               </h5>
             </td>
             <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray">
-                {{ item.email }}
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.correo }}
+              </h5>
+            </td>
+            <td class="py-3 px-3 whitespace-normal break-words text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.direccion }}
               </h5>
             </td>
             <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray">
-                {{ item.rol }}
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.identificacion }}
               </h5>
+            </td>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.telefono }}
+              </h5>
+            </td>
+            <td class="py-3 px-3 whitespace-normal break-words text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.institucion }}
+              </h5>
+            </td>
+            <td class="py-3 px-2 gap-2 whitespace-nowrap text-left flex flex-wrap items-center">
+              <button v-tooltip.bottom="'editar'" @click="editarCliente(item.id)"
+                class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary/40 dark:text-white rounded-md shadow-md">
+                <PencilSquareIcon class="h-4 w-4 text-gray" />
+              </button>
+              <button v-tooltip.bottom="'eliminar'" @click="eliminarCliente(item.id)"
+                class="p-2 hover:scale-105 dark:bg-danger/20 bg-danger/40 dark:text-white rounded-md shadow-md">
+                <ArchiveBoxIcon class="h-4 w-4 text-gray"/>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -142,15 +145,14 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { UserGroupIcon, UserIcon } from '@heroicons/vue/24/solid';
+import { UserIcon, ArchiveBoxIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
 import axios from '../../../plugins/axios';
 
 
 // Simulación de datos
-const totalUsuarios = ref(0);
+
 const totalClientes = ref(0);
-const totalDocentes = ref(0);
-const totalEstudiantes = ref(0);
+
 
 //pagiandor y search
 const usuarios = ref([]);
@@ -172,16 +174,14 @@ const getTotales = async () => {
     });
     console.log('Totales obtenidos:', response.data);
     totalClientes.value = response.data.Clientes;
-    totalDocentes.value = response.data.Docentes;
-    totalEstudiantes.value = response.data.Estudiantes;
-    totalUsuarios.value = totalClientes.value + totalDocentes.value + totalEstudiantes.value;
+
   } catch (error) {
     console.error('Error al obtener totales:', error);
   }
 };
 
 const fetchUsuarios = async () => {
-  const response = await axios.get('/api/info-user', {
+  const response = await axios.get('/api/clientes', {
     params: {
       search: search.value,
       per_page: perPage.value,
