@@ -1,71 +1,52 @@
 <template>
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
-    <h2 class="text-lg font-bold mb-4">Crear Nuevo Cliente</h2>
-    <form @submit.prevent="crearCliente">
+    <h2 class="text-lg font-bold mb-4">Crear Nuevo Docente</h2>
+    <form @submit.prevent="crearDocentes">
       <div class="mb-4">
         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-        <input v-model="cliente.name" type="text" id="nombre"
+        <input v-model="docente.name" type="text" id="nombre"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
       <div class="mb-4">
         <label for="apellidos" class="block text-sm font-medium text-gray-700">Apellidos</label>
-        <input v-model="cliente.apellidos" type="text" id="apellidos"
+        <input v-model="docente.apellidos" type="text" id="apellidos"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
       <div class="mb-4">
         <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación</label>
-        <input v-model="cliente.identificacion" type="text" id="identificacion"
+        <input v-model="docente.identificacion" type="text" id="identificacion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
-      <div class="mb-4">
-        <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
-        <input v-model="cliente.direccion" type="text" id="direccion"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
-      </div>
-
+      
       <div class="mb-4">
         <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-        <input v-model="cliente.telefono" type="text" id="telefono"
+        <input v-model="docente.telefono" type="text" id="telefono"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      
       <div class="mb-4">
-        <label for="pais" class="block text-sm font-medium text-gray-700">País</label>
-        <input v-model="cliente.pais" type="text" id="pais"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+        <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-2">Asignar cliente</label>
+        <select id="cliente_id" v-model="docente.cliente_id" required
+        class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-4 p-2 w-full whitespace-normal break-words">
+        <option class="" v-for="item in infoClientes" :key="item.id" :value="item.id">{{ item.correo }} - {{item.institucion}}</option>
+        
+      </select>
       </div>
-      <div class="mb-4">
-        <label for="ciudad" class="block text-sm font-medium text-gray-700">Ciudad</label>
-        <input v-model="cliente.ciudad" type="text" id="ciudad"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
-      </div>
-      <div class="mb-4">
-        <label for="institucion" class="block text-sm font-medium text-gray-700">Institución</label>
-        <input v-model="cliente.institucion" type="text" id="institucion"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
-      </div>
-      <!-- <div class="mb-4">
-        <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
-        <input @change="onFileChange" type="file" id="logo"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          accept="image/*" />
-      </div> -->
+      
+      
       <div class="mb-4">
         <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
-        <input v-model="cliente.email" type="email" id="correo"
+        <input v-model="docente.email" type="email" id="correo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
       <div class="mb-4">
         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input v-model="cliente.password" type="password" id="password"
+        <input v-model="docente.password" type="password" id="password"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -75,7 +56,7 @@
         </button>
         <button type="submit"
           class="px-4 py-2 bg-blue-500 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white">
-          Crear Cliente
+          Crear Docente
         </button>
       </div>
     </form>
@@ -83,38 +64,51 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import axios from '../../../plugins/axios';
 
 import Swal from 'sweetalert2';
 const swal = inject('$swal') as typeof Swal;
 
-const cliente = ref({
+//info clientes
+const infoClientes = ref([]);
+
+const docente = ref({
   name: '',
   apellidos: '',
   identificacion: '',
-  direccion: '',
   email: '',
   telefono: '',
-  pais: '',
-  ciudad: '',
-  institucion: '',
+  cliente_id: '',
   password: '',
-  rol: 'Cliente',
+  rol: 'Docente',
  
 });
 
-// const onFileChange = (event: Event) => {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     cliente.value.logo = file;
-//   }
-// };
+const getTotales = async () => {
+  try {
+    const response = await axios.get('/api/totales', {
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
+      },
+    });
+    console.log('Totales obtenidos:', response.data);
+    
+    infoClientes.value = response.data.instituciones;
+    
 
-const crearCliente = async () => {
+  } catch (error) {
+    console.error('Error al obtener totales:', error);
+  }
+};
+
+
+const crearDocentes = async () => {
   try {
     
-    const response = await axios.post('/api/clientes', JSON.stringify(cliente.value), {
+    const response = await axios.post('/api/docentes', JSON.stringify(docente.value), {
           headers: {
             'Content-Type': 'application/json',
             accept: 'application/json',
@@ -128,11 +122,10 @@ const crearCliente = async () => {
 
     swal.fire({
       icon: 'success',
-      title: 'Cliente registrado con éxito',
+      title: 'Docente registrado con éxito',
       html: `
         <p>${response.data.message}</p>
-        <p><strong>Cliente:</strong> ${response.data.data.name}</p>
-        <p><strong>Institución:</strong> ${response.data.data.institucion}</p>`,
+        <p><strong>Docente:</strong> ${response.data.data.nombre} ${response.data.data.apellidos}</p>`,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
@@ -146,10 +139,10 @@ const crearCliente = async () => {
     // Puedes agregar una lógica para redirigir o limpiar el formulario
   } catch (error) {
 
-    console.error('Error al crear cliente:', error);
+    console.error('Error al crear docente:', error);
     swal.fire({
       icon: 'error',
-      title: 'Error en la creación del cliente',
+      title: 'Error en la creación del docente',
       text: error.response?.data?.message || 'Ocurrió un error inesperado',
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
@@ -167,6 +160,11 @@ const regresar = () => {
   // Por ejemplo, usar el router para navegar hacia atrás
   window.history.back();
 };
+
+onMounted(() => {
+  getTotales();
+});
+
 </script>
 
 <style scoped>

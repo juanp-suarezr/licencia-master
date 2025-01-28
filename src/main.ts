@@ -17,6 +17,8 @@ import Tooltip from 'primevue/tooltip'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import VueAwesomePaginate from "vue-awesome-paginate";
 import "vue-awesome-paginate/dist/style.css";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 const pinia = createPinia()
 
@@ -29,6 +31,7 @@ app.use(router)
 app.use(store)
 app.directive('tooltip', Tooltip)
 app.use(VueAwesomePaginate)
+app.use(VueSweetalert2)
 app.use(PrimeVue, {
   unstyled: true,
   pt: Lara,

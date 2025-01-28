@@ -35,6 +35,12 @@
           Clientes
         </router-link>
       </li>
+      <li>
+        <router-link to="/docentes" class="block px-4 py-2 text-white hover:!bg-slate-600"
+          :class="{ '!bg-slate-600': isActive('/docentes')  }">
+          Docentes
+        </router-link>
+      </li>
       </ul>
     </nav>
   </div>

@@ -142,7 +142,7 @@
                     </td>
                     <td class="py-3 px-3 whitespace-nowrap text-left">
                       <h5 class="font-medium text-black dark:text-white">
-                        {{ item.institucion }} usuarios registrados
+                        {{ item.institucion }}
                       </h5>
                     </td>
                     <td class="py-3 px-3 whitespace-nowrap text-left">

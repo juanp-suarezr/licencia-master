@@ -1,10 +1,10 @@
 <template>
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
-    <h2 class="text-lg font-bold mb-4">Crear Nuevo Cliente</h2>
-    <form @submit.prevent="crearCliente">
+    <h2 class="text-lg font-bold mb-4">Editar Cliente</h2>
+    <form @submit.prevent="editarCliente">
       <div class="mb-4">
         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-        <input v-model="cliente.name" type="text" id="nombre"
+        <input v-model="cliente.nombre" type="text" id="nombre"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -59,23 +59,18 @@
       </div> -->
       <div class="mb-4">
         <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
-        <input v-model="cliente.email" type="email" id="correo"
+        <input v-model="cliente.correo" type="email" id="correo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
-      <div class="mb-4">
-        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input v-model="cliente.password" type="password" id="password"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
-      </div>
+      
       <div class="flex justify-between">
         <button type="button" @click="regresar" class="px-4 py-2 bg-graydark text-white rounded-md shadow-sm">
           Regresar
         </button>
         <button type="submit"
           class="px-4 py-2 bg-blue-500 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white">
-          Crear Cliente
+          Actualizar Cliente
         </button>
       </div>
     </form>
@@ -83,24 +78,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import axios from '../../../plugins/axios';
-
+import { useRoute } from 'vue-router';
+import { defineProps } from 'vue';
 import Swal from 'sweetalert2';
+
 const swal = inject('$swal') as typeof Swal;
 
+const route = useRoute();
+
+console.log(route.params.id);
+
 const cliente = ref({
-  name: '',
+  id: route.params.id,
+  nombre: '',
   apellidos: '',
   identificacion: '',
   direccion: '',
-  email: '',
+  correo: '',
   telefono: '',
   pais: '',
   ciudad: '',
   institucion: '',
-  password: '',
-  rol: 'Cliente',
+  
  
 });
 
@@ -111,62 +112,83 @@ const cliente = ref({
 //   }
 // };
 
-const crearCliente = async () => {
+const fetchCliente = async (id: number) => {
   try {
-    
-    const response = await axios.post('/api/clientes', JSON.stringify(cliente.value), {
-          headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
-          },
-        })
-  
-    console.log(response);
-
-
-    swal.fire({
-      icon: 'success',
-      title: 'Cliente registrado con éxito',
-      html: `
-        <p>${response.data.message}</p>
-        <p><strong>Cliente:</strong> ${response.data.data.name}</p>
-        <p><strong>Institución:</strong> ${response.data.data.institucion}</p>`,
-      customClass: {
-        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
-        title: 'dark:text-gray text-graydark',
-        confirmButton: 'bg-blue-500 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
-      },
-
-      didClose: () => {
-        window.history.back();
-      }
-    });
-    // Puedes agregar una lógica para redirigir o limpiar el formulario
+    const response = await axios.get(`/api/clientes/${id}`);
+    console.log('Cliente obtenido:', response.data.data);
+    asignarCliente(response.data.data);
   } catch (error) {
-
-    console.error('Error al crear cliente:', error);
-    swal.fire({
+    console.error('Error al obtener el cliente:', error);
+    Swal.fire({
       icon: 'error',
-      title: 'Error en la creación del cliente',
+      title: 'Error al obtener el cliente',
+      text: error.response?.data?.message || 'Ocurrió un error inesperado',
+    });
+  }
+};
+
+const asignarCliente = (data: any) => {
+  cliente.value = {
+    id: data.id,
+    nombre: data.nombre,
+    apellidos: data.apellidos,
+    identificacion: data.identificacion,
+    direccion: data.direccion,
+    correo: data.correo,
+    telefono: data.telefono,
+    pais: data.pais,
+    ciudad: data.ciudad,
+    institucion: data.institucion,
+    
+  };
+};
+
+const editarCliente = async () => {
+  try {
+    const response = await axios.patch(`/api/clientes/${cliente.value.id}`, JSON.stringify(cliente.value), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    });
+
+    console.log('Cliente actualizado:', response.data);
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Cliente actualizado con éxito',
+      text: response.data.message,
+    });
+  } catch (error) {
+    console.error('Error al actualizar el cliente:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al actualizar el cliente',
       text: error.response?.data?.message || 'Ocurrió un error inesperado',
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
         confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
       },
-
     });
-
   }
 };
+
+
 
 const regresar = () => {
   // Lógica para regresar a la vista anterior
   // Por ejemplo, usar el router para navegar hacia atrás
   window.history.back();
 };
+
+onMounted(() => {
+  const id = Number(route.params.id);
+  if (id) {
+    fetchCliente(id);
+  }
+});
+
 </script>
 
 <style scoped>

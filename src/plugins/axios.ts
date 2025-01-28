@@ -6,7 +6,7 @@ import { useLoading } from 'vue-loading-overlay';
 import { showLoader, hideLoader } from '../components/Loader/loader';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/',
+  baseURL: 'http://127.0.0.1:8000',
 })
 
 axiosInstance.interceptors.request.use((config) => {
@@ -17,9 +17,11 @@ axiosInstance.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('access_token')
 
   if (token) {
-
+    console.log("axios");
 
     config.headers.Authorization = `Bearer ${token}`
+    console.log(config);
+
   }
   return config
 }, function (error) {
