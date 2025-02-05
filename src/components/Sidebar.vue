@@ -1,46 +1,78 @@
 <template>
   <div
-    :class="['md:relative z-100 flex flex-col w-64 h-full bg-dark-2 dark:bg-boxdark shadow-lg gap-2 px-6 py-2', { 'hidden': !sidebarOpen, 'translate-x-0': sidebarOpen, 'md:block': true }]">
+    :class="['md:relative z-100 flex flex-col w-64 h-full overflow-y-auto bg-dark-2 dark:bg-boxdark shadow-lg gap-2 px-6 py-2', { 'hidden': !sidebarOpen, 'translate-x-0': sidebarOpen, 'md:block': true }]">
     <div class="flex items-center justify-center h-16">
       <router-link to="/" class="flex items-center">
         <img src="../assets/logo/iconoAZWhite.png" alt="Logo" class="w-1/4 me-2" />
         <h3 class="text-white text-title-sm">Licencia Master</h3>
       </router-link>
     </div>
-    <nav class="flex-1 overflow-y-auto mt-6">
-      <h3 class="mb-2 ml-4 text-sm font-medium text-bodydark2 uppercase">
+    <nav class="flex-1 mt-2 text-[14px]">
+      <!-- MENU -->
+      <h3 class="mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Menu
       </h3>
-      <ul class="space-y-2">
+      <!-- Dsshboard y usuarios -->
+      <ul class="">
+        <!-- dashboard -->
         <li>
-          <router-link to="/" class="block px-4 py-2 text-white hover:!bg-slate-600"
+          <router-link to="/" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActiveDashboard('/') }">
-            Dashboard
+            <HomeModernIcon class="h-4 w-4"/> Dashboard
           </router-link>
         </li>
+        <!-- usuarios -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
-          <router-link to="/usuarios" class="block px-4 py-2 text-white hover:!bg-slate-600"
+          <router-link to="/usuarios" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/usuarios') }">
-            Usuarios
+            <UsersIcon class="h-4 w-4"/> Usuarios
           </router-link>
         </li>
       </ul>
-      <h3 class="mt-4 mb-2 ml-4 text-sm font-medium text-bodydark2 uppercase">
+      <!-- GESTION REGISTROS -->
+      <h3 v-if="isAuthenticated && user.rol != 'Estudiante'" class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestion de registros
       </h3>
-      <ul>
-      <li>
-        <router-link to="/clientes" class="block px-4 py-2 text-white hover:!bg-slate-600"
-          :class="{ '!bg-slate-600': isActive('/clientes')  }">
-          Clientes
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/docentes" class="block px-4 py-2 text-white hover:!bg-slate-600"
-          :class="{ '!bg-slate-600': isActive('/docentes')  }">
-          Docentes
-        </router-link>
-      </li>
+      <!-- Clientes, docentes, estudiantes -->
+      <ul class="">
+        <!-- clientes -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/clientes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/clientes') }">
+            <BuildingLibraryIcon class="h-4 w-4"/> Clientes
+          </router-link>
+        </li>
+        <!-- docentes -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador' || user.rol == 'Docente'">
+          <router-link to="/docentes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/docentes') }">
+            <BriefcaseIcon class="h-4 w-4"/> Docentes
+          </router-link>
+        </li>
+        <!--  estudiantes -->
+        <li v-if="isAuthenticated && user.rol != 'Estudiante'">
+          <router-link to="/estudiantes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/estudiantes') }">
+            <AcademicCapIcon class="h-4 w-4"/> Estudiantes
+          </router-link>
+        </li>
+      </ul>
+      <!-- GESTION DE LICENCIAS -->
+      <!-- GESTION GRUPOS -->
+      <!-- GESTION ROLES -->
+      <h3 v-if="isAuthenticated && user.rol == 'Administrador'" class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+        Gestion de roles
+      </h3>
+      <!-- Clientes, docentes, estudiantes -->
+      <ul class="">
+        <!-- clientes -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/roles" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/roles') }">
+            <CubeTransparentIcon class="h-4 w-4"/> Roles
+          </router-link>
+        </li>
+      
       </ul>
     </nav>
   </div>
@@ -50,7 +82,7 @@
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/auth';
 import { storeToRefs } from 'pinia';
-import { UserGroupIcon, UserIcon } from '@heroicons/vue/24/solid';
+import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, CubeTransparentIcon  } from '@heroicons/vue/24/solid';
 
 // Usar el store de usuarios
 const userStore = useUserStore();

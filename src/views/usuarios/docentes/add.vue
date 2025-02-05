@@ -1,4 +1,7 @@
 <template>
+  <div class="w-full flex justify-start">
+    <breadcrumb-default pageTitle="Añadir docente" pageSubtitle="Docentes" path="docentes"></breadcrumb-default>
+  </div>
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
     <h2 class="text-lg font-bold mb-4">Crear Nuevo Docente</h2>
     <form @submit.prevent="crearDocentes">
@@ -16,14 +19,14 @@
       </div>
       <div class="mb-4">
         <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación</label>
-        <input v-model="docente.identificacion" type="text" id="identificacion"
+        <input v-model="docente.identificacion" type="number" id="identificacion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
       
       <div class="mb-4">
         <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-        <input v-model="docente.telefono" type="text" id="telefono"
+        <input v-model="docente.telefono" type="number" id="telefono"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -32,6 +35,7 @@
         <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-2">Asignar cliente</label>
         <select id="cliente_id" v-model="docente.cliente_id" required
         class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-4 p-2 w-full whitespace-normal break-words">
+        <option class="" value="" disabled>Seleccionar cliente</option>
         <option class="" v-for="item in infoClientes" :key="item.id" :value="item.id">{{ item.correo }} - {{item.institucion}}</option>
         
       </select>
@@ -66,7 +70,7 @@
 <script lang="ts" setup>
 import { ref, inject, onMounted } from 'vue';
 import axios from '../../../plugins/axios';
-
+import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 import Swal from 'sweetalert2';
 const swal = inject('$swal') as typeof Swal;
 
@@ -81,7 +85,6 @@ const docente = ref({
   telefono: '',
   cliente_id: '',
   password: '',
-  rol: 'Docente',
  
 });
 
@@ -112,8 +115,7 @@ const crearDocentes = async () => {
           headers: {
             'Content-Type': 'application/json',
             accept: 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
+            
           },
         })
   

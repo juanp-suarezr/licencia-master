@@ -9,9 +9,9 @@ export default {
       'rounded-md',
 
       // Color and Background
-      'bg-surface-0 dark:bg-surface-900',
+      'bg-white dark:bg-gray-800',
       'border',
-      { 'border-surface-300 dark:border-surface-600': !props.invalid },
+      { 'border-gray-300 dark:border-gray-600': !props.invalid },
 
       // Invalid State
       { 'border-red-500 dark:border-red-400': props.invalid },
@@ -21,9 +21,9 @@ export default {
       'duration-200',
 
       // States
-      { 'hover:border-primary-500 dark:hover:border-primary-300': !props.invalid },
+      { 'hover:border-blue-500 dark:hover:border-blue-300': !props.invalid },
       {
-        'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50':
+        'outline-none outline-offset-0 ring ring-blue-400/50 dark:ring-blue-300/50':
           state.focused,
       },
 
@@ -578,4 +578,87 @@ export default {
     leaveActiveClass: 'transition-opacity duration-100 ease-linear',
     leaveToClass: 'opacity-0',
   },
+  input: ({ props }) => ({
+    class: [
+      // Display and Position
+      'w-full',
+      'h-full',
+      'py-2',
+      'px-3',
+
+      // Color and Background
+      'bg-white dark:bg-gray-800',
+      'text-gray-900 dark:text-gray-100',
+
+      // Border and Outline
+      'border-none',
+      'outline-none',
+
+      // Misc
+      'placeholder-gray-400 dark:placeholder-gray-500',
+    ],
+  }),
+  tag: ({ props }) => ({
+    class: [
+      // Display and Position
+      'inline-flex',
+      'items-center',
+      'px-2',
+      'py-1',
+      'mr-1',
+      'mb-1',
+
+      // Shape
+      'rounded',
+
+      // Color and Background
+      'bg-blue-100 dark:bg-blue-900',
+      'text-blue-700 dark:text-blue-300',
+
+      // Border
+      'border',
+      'border-blue-300 dark:border-blue-700',
+
+      // Misc
+      'text-sm',
+    ],
+  }),
+  clearIcon: ({ props }) => ({
+    class: [
+      // Display and Position
+      'absolute',
+      'right-2',
+      'top-1/2',
+      'transform',
+      '-translate-y-1/2',
+
+      // Color
+      'text-gray-400 dark:text-gray-500',
+
+      // Hover State
+      'hover:text-gray-600 dark:hover:text-gray-300',
+
+      // Misc
+      'cursor-pointer',
+    ],
+  }),
+  dropdownIcon: ({ props }) => ({
+    class: [
+      // Display and Position
+      'absolute',
+      'right-2',
+      'top-1/2',
+      'transform',
+      '-translate-y-1/2',
+
+      // Color
+      'text-gray-400 dark:text-gray-500',
+
+      // Hover State
+      'hover:text-gray-600 dark:hover:text-gray-300',
+
+      // Misc
+      'cursor-pointer',
+    ],
+  }),
 }

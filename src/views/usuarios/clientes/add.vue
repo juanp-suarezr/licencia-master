@@ -1,4 +1,7 @@
 <template>
+  <div class="w-full flex justify-start">
+    <breadcrumb-default pageTitle="Añadir cliente" pageSubtitle="Clientes" path="clientes"></breadcrumb-default>
+  </div>
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
     <h2 class="text-lg font-bold mb-4">Crear Nuevo Cliente</h2>
     <form @submit.prevent="crearCliente">
@@ -16,7 +19,7 @@
       </div>
       <div class="mb-4">
         <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación</label>
-        <input v-model="cliente.identificacion" type="text" id="identificacion"
+        <input v-model="cliente.identificacion" type="number" id="identificacion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -29,7 +32,7 @@
 
       <div class="mb-4">
         <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-        <input v-model="cliente.telefono" type="text" id="telefono"
+        <input v-model="cliente.telefono" type="number" id="telefono"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -51,12 +54,12 @@
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
-      <!-- <div class="mb-4">
+      <div class="mb-4">
         <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
         <input @change="onFileChange" type="file" id="logo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           accept="image/*" />
-      </div> -->
+      </div>
       <div class="mb-4">
         <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
         <input v-model="cliente.email" type="email" id="correo"
@@ -85,6 +88,7 @@
 <script lang="ts" setup>
 import { ref, inject } from 'vue';
 import axios from '../../../plugins/axios';
+import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 
 import Swal from 'sweetalert2';
 const swal = inject('$swal') as typeof Swal;
@@ -100,29 +104,47 @@ const cliente = ref({
   ciudad: '',
   institucion: '',
   password: '',
-  rol: 'Cliente',
- 
+  logo: null,
+
 });
 
-// const onFileChange = (event: Event) => {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     cliente.value.logo = file;
-//   }
-// };
+const onFileChange = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) {
+    cliente.value.logo = file;
+    console.log(cliente.value.logo);
+    
+  }
+};
 
 const crearCliente = async () => {
+
+
   try {
-    
-    const response = await axios.post('/api/clientes', JSON.stringify(cliente.value), {
-          headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
-          },
-        })
-  
+
+    const formData = new FormData();
+    formData.append('name', cliente.value.name);
+    formData.append('apellidos', cliente.value.apellidos);
+    formData.append('identificacion', cliente.value.identificacion);
+    formData.append('direccion', cliente.value.direccion);
+    formData.append('email', cliente.value.email);
+    formData.append('password', cliente.value.password);
+    formData.append('telefono', cliente.value.telefono);
+    formData.append('pais', cliente.value.pais);
+    formData.append('ciudad', cliente.value.ciudad);
+    formData.append('institucion', cliente.value.institucion);
+
+
+    if (cliente.value.logo) {
+      formData.append('logo', cliente.value.logo);
+      
+      
+    }
+
+    const response = await axios.post('/api/clientes', formData, {
+      
+    });
+
     console.log(response);
 
 
@@ -131,7 +153,7 @@ const crearCliente = async () => {
       title: 'Cliente registrado con éxito',
       html: `
         <p>${response.data.message}</p>
-        <p><strong>Cliente:</strong> ${response.data.data.name}</p>
+        <p><strong>Cliente:</strong> ${response.data.data.nombre}</p>
         <p><strong>Institución:</strong> ${response.data.data.institucion}</p>`,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',

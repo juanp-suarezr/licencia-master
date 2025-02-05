@@ -1,14 +1,18 @@
 <template>
+  <div class="w-full flex justify-start">
+    <breadcrumb-default pageTitle="Clientes"></breadcrumb-default>
+  </div>
   <div class="w-full flex flex-wrap items-center sm:grid grid-cols-2 gap-2">
     <!-- seleccionar cliente -->
     <div v-if="user.rol == 'Administrador'"
       class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex flex-wrap items-center h-full gap-4">
       <label for="clientesSelect" class="block text-sm font-medium text-gray-700 mb-1">Seleccione un cliente</label>
-      <select id="clientesSelect" v-model="cliente" @change="fetchUsuarios"
+      <select id="clientesSelect" v-model="cliente" @change="actuBycliente"
         class="text-xs rounded-md bg-gray dark:bg-boxdark justify-end shadow-md p-2 w-[90%]">
         <option value="">Todos los clientes</option>
-        <option v-for="item in infoClientes" :key="item.id" :value="item.id">{{ item.correo }} - {{item.institucion}}</option>
-        
+        <option v-for="item in infoClientes" :key="item.id" :value="item.id">{{ item.correo }} - {{ item.institucion }}
+        </option>
+
       </select>
     </div>
     <!-- total clientes -->
@@ -176,6 +180,7 @@ import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia';
 import Modal from '@/components/Modal.vue';
 import Swal from 'sweetalert2';
+import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 
 const swal = inject('$swal') as typeof Swal;
 
@@ -216,7 +221,7 @@ const getTotales = async () => {
     console.log('Totales obtenidos:', response.data);
     totalDocentes.value = response.data.Docentes;
     infoClientes.value = response.data.instituciones;
-    
+
 
   } catch (error) {
     console.error('Error al obtener totales:', error);
@@ -244,7 +249,13 @@ const changePage = (newPage: number) => {
   fetchUsuarios();
 };
 
+const actuBycliente = () => {
+  page.value = 0;
+  fetchUsuarios();
+}; 
+
 const limpiar = () => {
+  page.value = 0;
   search.value = '';
   fetchUsuarios();
 };
@@ -264,9 +275,25 @@ const submitEliminar = async () => {
         'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
       },
     });
-    console.log('Cliente eliminado:', response.data);
-    ModalEliminar.value = false;
-    idEliminar.value = 0;
+    console.log('Docente eliminado:', response.data);
+    swal.fire({
+      icon: 'success',
+      title: 'Docente eliminado con éxito',
+      html: `
+        <p>${response.data.message}</p>
+        <p><strong>Docente:</strong> ${response.data.data.nombre} ${response.data.data.apellidos}</p>`,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+      didClose: () => {
+        ModalEliminar.value = false;
+        idEliminar.value = 0;
+        window.location.reload();
+      }
+
+    });
 
   } catch (error) {
     console.error('Error al eliminar cliente:', error);

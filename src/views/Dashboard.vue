@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout>
+  <div>
     <div class="flex flex-col h-full">
       <div class="flex-1">
         <div v-if="isAuthenticated && user.rol == 'Administrador'" class="md:grid gap-6 md:grid-cols-2">
@@ -135,7 +135,7 @@
                     <td class="py-3 pl-3" v-tooltip.left="item.nombre + ' ' + item.apellidos">
 
                       <Avatar v-if="item.logo != null" class="w-16 h-16 dark:!bg-grarkayd !bg-transparent shadow-md p-1"
-                        :image="getInitials(item.nombre)" shape="circle" />
+                        :image="getImage(item.logo)" shape="circle" />
                       <Avatar v-else
                         class="w-16 h-16 flex items-center justify-center shadow-md dark:!bg-graydark !bg-transparent p-1"
                         :label="getInitials(item.nombre)" shape="circle" />
@@ -160,7 +160,7 @@
         </div>
       </div>
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -214,6 +214,11 @@ const getInitials = function (name: string) {
     }
   }
   return initials;
+};
+
+const getImage = function (name: string) {
+  return `http://127.0.0.1:8000/uploads/instituciones/${name}`;
+  
 };
 
 onMounted(() => {

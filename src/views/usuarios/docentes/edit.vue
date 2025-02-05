@@ -1,4 +1,7 @@
 <template>
+  <div class="w-full flex justify-start">
+    <breadcrumb-default pageTitle="editar docente" pageSubtitle="Docentes" path="docentes"></breadcrumb-default>
+  </div>
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
     <h2 class="text-lg font-bold mb-4">Editar Docente</h2>
     <form @submit.prevent="editarDocentes">
@@ -16,14 +19,14 @@
       </div>
       <div class="mb-4">
         <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación</label>
-        <input v-model="docente.identificacion" type="text" id="identificacion"
+        <input v-model="docente.identificacion" type="number" id="identificacion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
     
       <div class="mb-4">
         <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-        <input v-model="docente.telefono" type="text" id="telefono"
+        <input v-model="docente.telefono" type="number" id="telefono"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
@@ -34,6 +37,23 @@
         <input v-model="docente.correo" type="email" id="correo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <div class="flex flex-wrap gap-4 w-full mt-2">
+          <!-- Input docente -->
+          <input v-if="docente.actu_password" v-model="docente.password" type="password" id="password"
+          class="mt-1 p-2 w-auto border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+          />
+          <!-- Boton -->
+          <button type="button" @click="changeStatePaswword"
+            class="px-2 py-1 dark:bg-slate-900 dark:text-gray rounded-md shadow-sm">
+            {{ docente.actu_password ? 'Cancelar' : 'Actualizar contraseña' }}
+          </button>
+        
+        </div>
+        
       </div>
       
       <div class="flex justify-between">
@@ -52,13 +72,17 @@
 <script lang="ts" setup>
 import { ref, inject, onMounted } from 'vue';
 import axios from '../../../plugins/axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { defineProps } from 'vue';
+import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 import Swal from 'sweetalert2';
+import Password from 'primevue/password';
+import { watch } from 'fs';
 
 const swal = inject('$swal') as typeof Swal;
 
 const route = useRoute();
+const router = useRouter();
 
 console.log(route.params.id);
 
@@ -69,22 +93,25 @@ const docente = ref({
   identificacion: '',
   correo: '',
   telefono: '',
-  
+  actu_password: false,
+  password: '',
   
  
 });
 
-// const onFileChange = (event: Event) => {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     docente.value.logo = file;
-//   }
-// };
+const changeStatePaswword = () => {
+  docente.value.actu_password = !docente.value.actu_password;
+
+  if (docente.value.actu_password) {
+    docente.value.password = '123456789';
+  }
+
+};
 
 const fetchdocente = async (id: number) => {
   try {
     const response = await axios.get(`/api/docentes/${id}`);
-    console.log('docente obtenido:', response.data.data);
+    
     asignardocente(response.data.data);
   } catch (error) {
     console.error('Error al obtener el docente:', error);
@@ -92,6 +119,14 @@ const fetchdocente = async (id: number) => {
       icon: 'error',
       title: 'Error al obtener el docente',
       text: error.response?.data?.message || 'Ocurrió un error inesperado',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+      didClose: () => {
+        router.push('/');
+      },
     });
   }
 };
@@ -104,11 +139,13 @@ const asignardocente = (data: any) => {
     identificacion: data.identificacion,
     correo: data.correo,
     telefono: data.telefono,
-    
+    actu_password: false,
+    password: '123456789',
     
     
   };
 };
+
 
 
 const editarDocentes = async () => {
@@ -126,6 +163,16 @@ const editarDocentes = async () => {
       icon: 'success',
       title: 'docente actualizado con éxito',
       text: response.data.message,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+      didClose: () => {
+        if (docente.value.actu_password) {
+          docente.value.actu_password = false;
+        }
+      },
     });
   } catch (error) {
     console.error('Error al actualizar el docente:', error);
