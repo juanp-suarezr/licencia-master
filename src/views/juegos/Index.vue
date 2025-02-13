@@ -1,19 +1,19 @@
 <template>
     <div class="w-full">
         <div class="w-full flex justify-start">
-            <breadcrumb-default pageTitle="Roles"></breadcrumb-default>
+            <breadcrumb-default pageTitle="Juegos"></breadcrumb-default>
         </div>
-        <!-- total roles -->
+        <!-- total juegos -->
         <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
             <!-- info -->
             <div class="w-full">
-                <h3 class="text-sm font-bold">Total de Roles</h3>
-                <p class="text-lg">{{ totalRoles }}</p>
+                <h3 class="text-sm font-bold">Total de Juegos Creados</h3>
+                <p class="text-lg">{{ totalJuegos }}</p>
             </div>
             <!-- icono -->
             <div class="w-auto flex items-center justify-end">
                 <span class="bg-primary/20 shadow-lg p-2 rounded-md">
-                    <CubeTransparentIcon class="h-6 w-6 text-primary/40" />
+                    <RocketLaunchIcon class="h-6 w-6 text-primary/40" />
                 </span>
             </div>
         </div>
@@ -22,14 +22,22 @@
 
     <!-- tabla usuarios -->
     <div class="w-auto mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
-        <h2 class="mt-2 px-4 text-base">Roles</h2>
+        <div class="flex flex-wrap justify-between items-center">
+            <h2 class="mt-2 px-4 text-base">Juegos</h2>
+            <a href="/juegos-create"
+                class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md">
+                Crear Juego
+            </a>
+        </div>
+        
+
         <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
             <div class="flex flex-wrap gap-2 mb-2">
 
-                <input v-model="search" @keyup.enter="fetchRoles" type="text"
+                <input v-model="search" @keyup.enter="fetchJuegos" type="text"
                     class="p-2 rounded-md bg-gray dark:bg-graydark placeholder:text-xs shadow-md"
-                    placeholder="Buscar usuarios..." />
-                <button @click="fetchRoles" class="p-2 hover:bg-blue-800 bg-boxdark text-white rounded-md shadow-md">
+                    placeholder="Buscar por codigo..." />
+                <button @click="fetchJuegos" class="p-2 hover:bg-blue-800 bg-boxdark text-white rounded-md shadow-md">
                     Buscar
                 </button>
                 <button @click="limpiar"
@@ -37,10 +45,14 @@
                     Limpiar
                 </button>
             </div>
-            <a href="/roles-create"
-                class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md">
-                Nuevo Rol
-            </a>
+
+            <select v-model="perPage" @change="fetchJuegos" v-if="totalJuegos > 5"
+                class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
+                <option :value="5">5</option>
+                <option v-if="totalJuegos >= 10" :value="10">10</option>
+                <option v-if="totalJuegos >= 15" :value="15">15</option>
+                <option v-if="totalJuegos >= 20" :value="20">20</option>
+            </select>
         </div>
         <div class="overflow-x-auto mt-4">
             <table class="table-auto w-full bg-white dark:bg-boxdark text-sm">
@@ -53,6 +65,12 @@
                         <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
                             NOMBRE
                         </th>
+                        <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+                            CÓDIGO
+                        </th>
+                        <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+                            ESTADO
+                        </th>
                         <th class="py-2 px-2 font-medium text-black dark:text-white text-left flex justify-end">
                             ACCIONES
                         </th>
@@ -60,8 +78,8 @@
 
                     </tr>
                 </thead>
-                <tbody v-if="roles.length != 0">
-                    <tr v-for="(item, index) in roles" :key="index">
+                <tbody v-if="juegos.length != 0">
+                    <tr v-for="(item, index) in juegos" :key="index">
                         <td class="py-3 px-3 whitespace-nowrap text-left">
                             <h5 class="font-medium text-graydark dark:text-gray">
                                 {{ index + 1 }}
@@ -69,18 +87,37 @@
                         </td>
                         <td class="py-3 px-3 whitespace-nowrap text-left">
                             <h5 class="font-medium text-graydark dark:text-gray">
-                                {{ item.name }}
+                                {{ item.nombre_juego }}
+                            </h5>
+                        </td>
+
+                        <td class="py-3 px-3 whitespace-nowrap text-left">
+                            <h5 class="font-medium text-graydark dark:text-gray">
+                                {{ item.cod_juegos }}
+                            </h5>
+                        </td>
+
+                        <td class="py-3 px-3 whitespace-nowrap text-left">
+                            <h5 class="font-medium text-graydark dark:text-gray">
+                                <span :class="[
+                                    item.estado == 1 ? 'bg-success/40' : 'bg-danger/40',
+                                    'px-2 py-1 rounded-md shadow-md'
+                                ]">
+                                    {{ item.estado ? 'Activo' : 'Bloqueado' }}
+                                </span>
                             </h5>
                         </td>
 
                         <td class="py-3 px-2 gap-2 whitespace-nowrap text-left flex flex-wrap items-center justify-end">
-                            <a v-tooltip.bottom="'editar'" :href="'/roles-edit/' + item.id"
-                                class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary/40 dark:text-white rounded-md shadow-md flex flex-wrap items-center gap-2">
-                                <PencilSquareIcon class="h-4 w-4 text-gray" /> Editar
-                            </a>
-                            <button v-tooltip.bottom="'eliminar'" @click="eliminarRol(item.id)"
+                            <!-- Boton de bloqueado -->
+                            <button v-if="item.estado" v-tooltip.bottom="'bloquear'" @click="eliminarRol(item.id)"
                                 class="p-2 hover:scale-105 dark:bg-danger/20 bg-danger/40 dark:text-white rounded-md shadow-md flex flex-wrap items-center gap-2">
-                                <ArchiveBoxIcon class="h-4 w-4 text-gray" /> Eliminar
+                                <ArchiveBoxIcon class="h-4 w-4 text-gray" /> Bloquear
+                            </button>
+                            <!-- Boton de desbloquear -->
+                            <button v-if="!item.estado" v-tooltip.bottom="'desbloquear'" @click="aprobarJuego(item.id)"
+                                class="p-2 hover:scale-105 dark:bg-success/20 bg-success/40 dark:text-white rounded-md shadow-md flex flex-wrap items-center gap-2">
+                                <CheckIcon class="h-4 w-4 text-gray" /> Desbloquear
                             </button>
                         </td>
 
@@ -89,7 +126,7 @@
             </table>
 
             <!-- Paginador -->
-            <div class="w-full flex justify-center mt-4" v-if="roles.length != 0 || totalPages > 1">
+            <div class="w-full flex justify-center mt-4" v-if="juegos.length != 0 || totalPages > 1">
                 <vue-awesome-paginate :total-items="perPage * totalPages" :items-per-page="perPage" :max-pages-shown="5"
                     v-model="currentPage" @click="changePage" />
             </div>
@@ -101,21 +138,16 @@
     <!-- Modal -->
     <Modal :isOpen="ModalEliminar" @close="closeModal">
         <div class="p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
-            <h3 class="text-lg font-bold">Eliminar Rol</h3>
-            <p class="text-sm mt-2">¿Estás seguro de eliminar este rol? Por favor, ingrese su contraseña para confirmar.
+            <h3 class="text-lg font-bold">Bloquear Juego</h3>
+            <p class="text-sm mt-2">¿Estás seguro de eliminar este juego?
             </p>
             <div class="mb-4">
-                <label for="password"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
-                <input v-model="password" type="password" id="password"
-                    class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-                    required />
-                <small v-if="errors.password" class="text-red-500">{{ errors.password }}</small>
+                <p>Al bloquear el juego no podrá usarse como código para presentar el juego al estudiante.</p>
             </div>
             <div class="flex justify-end mt-4 gap-2">
                 <button @click="submitEliminar"
                     class="p-2 hover:scale-105 bg-danger/20 dark:bg-danger/40 dark:text-white rounded-md shadow-md">
-                    Eliminar
+                    Bloquear
                 </button>
                 <button @click="ModalEliminar = false"
                     class="p-2 hover:scale-105 bg-gray dark:bg-graydark dark:text-white rounded-md shadow-md">
@@ -129,7 +161,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, inject } from 'vue';
-import { CubeTransparentIcon, PencilSquareIcon, ArchiveBoxIcon } from '@heroicons/vue/24/solid';
+import { RocketLaunchIcon, ArchiveBoxIcon, CheckIcon } from '@heroicons/vue/24/solid';
 import axios from '../../plugins/axios';
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 import Modal from '@/components/Modal.vue';
@@ -139,10 +171,10 @@ const swal = inject('$swal') as typeof Swal;
 
 
 // Simulación de datos
-const totalRoles = ref(0);
+const totalJuegos = ref(0);
 
 //pagiandor y search
-const roles = ref([]);
+const juegos = ref([]);
 const search = ref('');
 const perPage = ref(5);
 const page = ref(1);
@@ -151,37 +183,36 @@ const currentPage = ref(1);
 
 //Modal
 const ModalEliminar = ref(false);
-const password = ref('');
-const errors = ref({ password: '' });
+
 
 //idEliminar
 const idEliminar = ref(0);
 
 
-const fetchRoles = async () => {
-    const response = await axios.get('/api/roles', {
+const fetchJuegos = async () => {
+    const response = await axios.get('/api/juegos', {
         params: {
             search: search.value,
             per_page: perPage.value,
             page: page.value,
         },
     });
-    console.log('roles obtenidos:', response.data.data);
+    console.log('juegos obtenidos:', response.data.data);
     console.log('Total de páginas:', response.data.data.last_page);
 
-    roles.value = response.data.data.data;
+    juegos.value = response.data.data.data;
     totalPages.value = response.data.data.last_page;
-    totalRoles.value = response.data.data.total;
+    totalJuegos.value = response.data.data.total;
 };
 
 const changePage = (newPage: number) => {
     page.value = newPage;
-    fetchRoles();
+    fetchJuegos();
 };
 
 const limpiar = () => {
     search.value = '';
-    fetchRoles();
+    fetchJuegos();
 };
 
 const eliminarRol = (id: number) => {
@@ -191,19 +222,18 @@ const eliminarRol = (id: number) => {
 };
 
 const submitEliminar = async () => {
-    const deletePassword = { password: password.value };
+
     try {
-        const response = await axios.delete(`/api/roles/${idEliminar.value}`, {
-            data: deletePassword,
+        const response = await axios.delete(`/api/juegos/${idEliminar.value}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        console.log('rol eliminado:', response.data);
+        console.log('rol bloqueado:', response.data);
         swal.fire({
             icon: 'success',
-            title: 'Rol eliminado con éxito',
-            text: 'Recurso eliminado correctamente',
+            title: 'Juego bloqueado con éxito',
+            text: 'Recurso bloqueado correctamente',
             customClass: {
                 popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
                 title: 'dark:text-gray text-graydark',
@@ -217,12 +247,58 @@ const submitEliminar = async () => {
         });
 
     } catch (error) {
-        console.error('Error al eliminar rol:', error);
+        console.error('Error al bloquear juego:', error);
         swal.fire({
             icon: 'error',
-            title: 'Error al eliminar rol',
+            title: 'Error al bloquear juego',
             html: `
         <p>Ocurrió un error inesperado, vuelva a intentar más tarde</p>`,
+            customClass: {
+                popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+                title: 'dark:text-gray text-graydark',
+                confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+            },
+            didClose: () => {
+                closeModal();
+            }
+
+        });
+    }
+};
+
+//aprobar o desbloquear juego
+const aprobarJuego = async (idAprobar) => {
+
+    try {
+        const response = await axios.patch(`/api/juegos/${idAprobar}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('rol Desbloqueado:', response.data);
+        swal.fire({
+            icon: 'success',
+            title: 'Juego Desbloqueado con éxito',
+            text: 'Recurso Desbloqueado correctamente',
+            customClass: {
+                popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+                title: 'dark:text-gray text-graydark',
+                confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+            },
+            didClose: () => {
+                closeModal();
+                window.location.reload();
+            }
+
+        });
+
+    } catch (error) {
+        console.error('Error al Desbloquear juego:', error);
+        swal.fire({
+            icon: 'error',
+            title: 'Error al Desbloquear juego',
+            html: `
+    <p>Ocurrió un error inesperado, vuelva a intentar más tarde</p>`,
             customClass: {
                 popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
                 title: 'dark:text-gray text-graydark',
@@ -239,12 +315,11 @@ const submitEliminar = async () => {
 const closeModal = () => {
     ModalEliminar.value = false;
     idEliminar.value = 0;
-    password.value = '';
-    errors.value.password = '';
+
 };
 
 onMounted(() => {
-    fetchRoles();
+    fetchJuegos();
 });
 
 

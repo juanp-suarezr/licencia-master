@@ -18,19 +18,20 @@
         <li>
           <router-link to="/" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActiveDashboard('/') }">
-            <HomeModernIcon class="h-4 w-4"/> Dashboard
+            <HomeModernIcon class="h-4 w-4" /> Dashboard
           </router-link>
         </li>
         <!-- usuarios -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
           <router-link to="/usuarios" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/usuarios') }">
-            <UsersIcon class="h-4 w-4"/> Usuarios
+            <UsersIcon class="h-4 w-4" /> Usuarios
           </router-link>
         </li>
       </ul>
       <!-- GESTION REGISTROS -->
-      <h3 v-if="isAuthenticated && user.rol != 'Estudiante'" class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+      <h3 v-if="isAuthenticated && user.rol != 'Estudiante'"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestion de registros
       </h3>
       <!-- Clientes, docentes, estudiantes -->
@@ -39,41 +40,66 @@
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
           <router-link to="/clientes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/clientes') }">
-            <BuildingLibraryIcon class="h-4 w-4"/> Clientes
+            <BuildingLibraryIcon class="h-4 w-4" /> Clientes
           </router-link>
         </li>
         <!-- docentes -->
         <li v-if="isAuthenticated && user.rol == 'Administrador' || user.rol == 'Docente'">
           <router-link to="/docentes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/docentes') }">
-            <BriefcaseIcon class="h-4 w-4"/> Docentes
+            <BriefcaseIcon class="h-4 w-4" /> Docentes
           </router-link>
         </li>
         <!--  estudiantes -->
         <li v-if="isAuthenticated && user.rol != 'Estudiante'">
           <router-link to="/estudiantes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/estudiantes') }">
-            <AcademicCapIcon class="h-4 w-4"/> Estudiantes
+            <AcademicCapIcon class="h-4 w-4" /> Estudiantes
           </router-link>
         </li>
       </ul>
       <!-- GESTION DE LICENCIAS -->
       <!-- GESTION GRUPOS -->
+      <!-- GESTION JUEGOS -->
+      <h3 v-if="isAuthenticated && user.rol == 'Administrador'"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+        Gestion de juegos
+      </h3>
+      <!-- Clientes, docentes, estudiantes -->
+      <ul class="">
+        <!-- juegos -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/juegos" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/juegos') }">
+            <RocketLaunchIcon class="h-4 w-4" /> Juegos
+          </router-link>
+        </li>
+        <!-- parametros -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/parametros" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/parametros') }">
+            <AdjustmentsHorizontalIcon class="h-4 w-4" /> Parámetros
+          </router-link>
+        </li>
+
+      </ul>
       <!-- GESTION ROLES -->
-      <h3 v-if="isAuthenticated && user.rol == 'Administrador'" class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+      <h3 v-if="isAuthenticated && user.rol == 'Administrador'"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestion de roles
       </h3>
       <!-- Clientes, docentes, estudiantes -->
       <ul class="">
-        <!-- clientes -->
+        <!-- Roles -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
           <router-link to="/roles" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/roles') }">
-            <CubeTransparentIcon class="h-4 w-4"/> Roles
+            <CubeTransparentIcon class="h-4 w-4" /> Roles
           </router-link>
         </li>
-      
+
       </ul>
+
     </nav>
   </div>
 </template>
@@ -82,7 +108,7 @@
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/auth';
 import { storeToRefs } from 'pinia';
-import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, CubeTransparentIcon  } from '@heroicons/vue/24/solid';
+import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon } from '@heroicons/vue/24/solid';
 
 // Usar el store de usuarios
 const userStore = useUserStore();

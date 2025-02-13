@@ -13,6 +13,15 @@ import EstudiantesEdit from '../views/usuarios/estudiantes/edit.vue'
 import Roles from '../views/roles/Index.vue'
 import RolesCreate from '../views/roles/add.vue'
 import RolesEdit from '../views/roles/edit.vue'
+import juegos from '../views/juegos/Index.vue'
+import juegosCreate from '../views/juegos/add.vue'
+import Parametros from '../views/parametros/Index.vue'
+import ParametrosAreaJuegos from '../views/parametros/area_juegos/Index.vue'
+import ParametrosGradoJuegos from '../views/parametros/grado_juegos/Index.vue'
+import ParametrosJuegos from '../views/parametros/juegos/Index.vue'
+import ParametrosLocacionJuegos from '../views/parametros/locacion_juegos/Index.vue'
+import ParametrosMisionJuegos from '../views/parametros/mision_juegos/Index.vue'
+import ParametrosSubambiente from '../views/parametros/subambiente_juegos/Index.vue'
 import Login from '../views/auth/Login.vue'
 
 const routes = [
@@ -38,12 +47,28 @@ const routes = [
       //Licencias
       //Tipo licencias
       //Grupos
+      //juegos
+      { path: 'juegos', name: 'juegos', title: 'Juegos', meta: 'juegos', component: juegos },
+      { path: 'juegos-create', name: 'JuegosCreate', title: 'Nuevo Juego', meta: 'juegos', component: juegosCreate },
       //Parametros
+      { path: 'parametros', name: 'parametros', title: 'Parámetros', meta: 'parametros', component: Parametros },
+      //area juegos
+      { path: 'parametros-area-juegos', name: 'ParametrosAreaJuegos', title: 'Parámetros Area Juegos', meta: 'parametros', component: ParametrosAreaJuegos },
+      //grado juegos
+      { path: 'parametros-grado-juegos', name: 'ParametrosGradoJuegos', title: 'Parámetros Grado Juegos', meta: 'parametros', component: ParametrosGradoJuegos },
+      //juegos
+      { path: 'parametros-juegos', name: 'ParametrosJuegos', title: 'Parámetros Juegos', meta: 'parametros', component: ParametrosJuegos },
+      //locación juegos
+      { path: 'parametros-locacion-juegos', name: 'ParametrosLocacionJuegos', title: 'Parámetros Locación Juegos', meta: 'parametros', component: ParametrosLocacionJuegos },
+      //mision juegos
+      { path: 'parametros-mision-juegos', name: 'ParametrosMisionJuegos', title: 'Parámetros Misión Juegos', meta: 'parametros', component: ParametrosMisionJuegos },
+      //subambiente juegos
+      { path: 'parametros-subambiente', name: 'ParametrosSubambiente', title: 'Parámetros Sub-ambiente Juegos', meta: 'parametros', component: ParametrosSubambiente },
       //Roles
-      //estudiantes
       { path: 'roles', name: 'roles', title: 'Roles', meta: 'roles', component: Roles },
       { path: 'roles-create', name: 'RolesCreate', title: 'Nuevo Rol', meta: 'roles', component: RolesCreate },
       { path: 'roles-edit/:id', name: 'RolesEdit', title: 'Editar Rol', meta: 'roles', component: RolesEdit },
+      
 
 
     ],
