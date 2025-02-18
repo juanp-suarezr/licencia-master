@@ -7,7 +7,7 @@
         <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center">
             <!-- info -->
             <div class="w-full">
-                <h3 class="text-sm font-bold">Total de Juegos Creados</h3>
+                <h3 class="text-sm font-bold">Total de Código de Juegos Creados</h3>
                 <p class="text-lg">{{ totalJuegos }}</p>
             </div>
             <!-- icono -->
@@ -23,10 +23,10 @@
     <!-- tabla usuarios -->
     <div class="w-auto mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
         <div class="flex flex-wrap justify-between items-center">
-            <h2 class="mt-2 px-4 text-base">Juegos</h2>
+            <h2 class="mt-2 px-4 text-base">Código Juegos</h2>
             <a href="/juegos-create"
                 class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md">
-                Crear Juego
+                Crear Código de Juego
             </a>
         </div>
         

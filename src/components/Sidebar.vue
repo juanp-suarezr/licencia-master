@@ -71,7 +71,7 @@
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
           <router-link to="/juegos" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/juegos') }">
-            <RocketLaunchIcon class="h-4 w-4" /> Juegos
+            <RocketLaunchIcon class="h-4 w-4" /> Cod juegos
           </router-link>
         </li>
         <!-- parametros -->

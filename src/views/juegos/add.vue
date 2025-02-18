@@ -1,10 +1,10 @@
 <template>
   <div class="w-full flex justify-start">
-    <breadcrumb-default pageTitle="Nuevo Juego" pageSubtitle="Juegos" path="juegos"></breadcrumb-default>
+    <breadcrumb-default pageTitle="Nuevo Código Juego" pageSubtitle="Juegos" path="juegos"></breadcrumb-default>
   </div>
   <div class="w-full grid md:grid-cols-3 gap-4">
     <div class="md:col-span-2 w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md h-full">
-      <h2 class="text-lg font-bold mb-4">Crear Nuevo Juego</h2>
+      <h2 class="text-lg font-bold mb-4">Crear nuevo código de juego</h2>
       <form @submit.prevent="submit" class="sm:grid sm:grid-cols-2 gap-4">
         <!-- locacion -->
         <div class="mb-4">
@@ -45,7 +45,7 @@
         </div>
         <!-- juego -->
         <div class="mb-4 relative">
-          <label for="juego" class="block text-sm font-medium text-gray-700 mb-2">Asignar Juego</label>
+          <label for="juego" class="block text-sm font-medium text-gray-700 mb-2">Asignar Juego Base</label>
           <div @click="toggleDropdownJuego"
             class="cursor-pointer text-xs md:text-sm border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end p-2 w-full whitespace-normal break-words">
             {{ selectedJuego ? selectedJuego.nombre : 'Seleccionar juego' }}
