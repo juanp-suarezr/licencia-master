@@ -49,9 +49,9 @@
             <select v-model="perPage" @change="fetchJuegos" v-if="totalJuegos > 5"
                 class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
                 <option :value="5">5</option>
-                <option v-if="totalJuegos >= 10" :value="10">10</option>
-                <option v-if="totalJuegos >= 15" :value="15">15</option>
-                <option v-if="totalJuegos >= 20" :value="20">20</option>
+                <option v-if="totalJuegos >= 6" :value="10">10</option>
+                <option v-if="totalJuegos >= 11" :value="15">15</option>
+                <option v-if="totalJuegos >= 16" :value="20">20</option>
             </select>
         </div>
         <div class="overflow-x-auto mt-4">

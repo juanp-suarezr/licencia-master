@@ -58,8 +58,45 @@
           </router-link>
         </li>
       </ul>
-      <!-- GESTION DE LICENCIAS -->
       <!-- GESTION GRUPOS -->
+      <h3 v-if="isAuthenticated && user.rol != 'Estudiante'"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+        Gestion de grupos
+      </h3>
+      <!-- grupos -->
+      <ul class="">
+        <!-- grupos -->
+        <li v-if="isAuthenticated && user.rol != 'Estudiante'">
+          <router-link to="/grupos" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/grupos') }">
+            <UserGroupIcon class="h-4 w-4" /> Grupos
+          </router-link>
+        </li>
+        
+      </ul>
+      <!-- GESTION DE LICENCIAS -->
+      <h3 v-if="isAuthenticated && user.rol == 'Administrador'"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+        Gestión de licencias
+      </h3>
+      <!-- Clientes, docentes, estudiantes -->
+      <ul class="">
+        <!-- licencias -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/licencias" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/licencias') }">
+            <CreditCardIcon class="h-4 w-4" /> Licencias
+          </router-link>
+        </li>
+        <!-- tipo licencias -->
+        <li v-if="isAuthenticated && user.rol == 'Administrador'">
+          <router-link to="/tipo-licencias" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActive('/tipo-licencias') }">
+            <RectangleGroupIcon class="h-4 w-4" /> Tipo licencias
+          </router-link>
+        </li>
+      </ul>
+      
       <!-- GESTION JUEGOS -->
       <h3 v-if="isAuthenticated && user.rol == 'Administrador'"
         class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
@@ -108,7 +145,7 @@
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/auth';
 import { storeToRefs } from 'pinia';
-import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon } from '@heroicons/vue/24/solid';
+import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, UserGroupIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, CreditCardIcon, RectangleGroupIcon } from '@heroicons/vue/24/solid';
 
 // Usar el store de usuarios
 const userStore = useUserStore();

@@ -47,9 +47,9 @@
       <select v-model="perPage" @change="fetchUsuarios" v-if="totalClientes > 5"
         class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
         <option :value="5">5</option>
-        <option v-if="totalClientes >= 10" :value="10">10</option>
-        <option v-if="totalClientes >= 15" :value="15">15</option>
-        <option v-if="totalClientes >= 20" :value="20">20</option>
+        <option v-if="totalClientes >= 6" :value="10">10</option>
+        <option v-if="totalClientes >= 11" :value="15">15</option>
+        <option v-if="totalClientes >= 16" :value="20">20</option>
       </select>
     </div>
     <div class="overflow-x-auto mt-4">
@@ -133,6 +133,17 @@
             </td>
           </tr>
         </tbody>
+        <tbody v-else class="w-full">
+                    
+                    <tr>
+                        <td class="w-auto"></td>
+                        <td class="w-auto"></td>
+                        <td class="w-auto flex justify-center items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
+                        <td class="w-auto"></td>
+                        <td class="w-auto"></td>
+                    </tr>
+                    
+                </tbody>
       </table>
 
       <!-- Paginador -->

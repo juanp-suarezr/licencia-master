@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex justify-start">
-    <breadcrumb-default pageTitle="Clientes"></breadcrumb-default>
+    <breadcrumb-default pageTitle="Licencias"></breadcrumb-default>
   </div>
   <div class="w-full flex flex-wrap items-center sm:grid grid-cols-2 gap-2">
     <!-- seleccionar cliente -->
@@ -15,17 +15,17 @@
 
       </select>
     </div>
-    <!-- total clientes -->
+    <!-- total licencias -->
     <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex items-center gap-2 h-full">
       <!-- info -->
       <div class="w-full">
-        <h3 class="text-sm font-bold">Total de docentes</h3>
-        <p class="text-lg">{{ totalDocentes }}</p>
+        <h3 class="text-sm font-bold">Total de licencias</h3>
+        <p class="text-lg">{{ totalLicencias }}</p>
       </div>
       <!-- icono -->
       <div class="w-auto flex items-center justify-end">
         <span class="bg-success/20 shadow-lg p-2 rounded-md">
-          <BriefcaseIcon class="h-6 w-6 text-success/40" />
+          <CreditCardIcon class="h-6 w-6 text-success/40" />
         </span>
       </div>
     </div>
@@ -38,31 +38,25 @@
   <!-- tabla usuarios -->
   <div class="w-full mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
     <div class="flex flex-wrap justify-between items-center">
-      <h2 class="mt-2 px-4 text-base">Docentes</h2>
-      <a href="/docentes-create"
+      <h2 class="mt-2 px-4 text-base">Licencias</h2>
+      <a href="/licencias-create"
         class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md">
-        Nuevo docente
+        Nueva licencia
       </a>
     </div>
     <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
       <div class="flex flex-wrap gap-2 mb-2">
 
-        <input v-model="search" @keyup.enter="fetchUsuarios"
-          class="p-2 rounded-md bg-gray dark:bg-graydark placeholder:text-xs shadow-md"
-          placeholder="Buscar usuarios..." />
-        <button @click="fetchUsuarios" class="p-2 hover:bg-blue-800 bg-boxdark text-white rounded-md shadow-md">
-          Buscar
-        </button>
         <button @click="limpiar" class="p-2 hover:scale-105 dark:bg-primary/20 dark:text-white rounded-md shadow-md">
           Limpiar
         </button>
       </div>
-      <select v-model="perPage" @change="fetchUsuarios" v-if="totalDocentes > 5"
+      <select v-model="perPage" @change="fetchUsuarios" v-if="totalLicencias > 5"
         class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
         <option :value="5">5</option>
-        <option v-if="totalDocentes >= 6" :value="10">10</option>
-        <option v-if="totalDocentes >= 11" :value="15">15</option>
-        <option v-if="totalDocentes >= 16" :value="20">20</option>
+        <option v-if="totalLicencias >= 6" :value="10">10</option>
+        <option v-if="totalLicencias >= 11" :value="15">15</option>
+        <option v-if="totalLicencias >= 16" :value="20">20</option>
       </select>
     </div>
     <div class="overflow-x-auto mt-4">
@@ -74,21 +68,19 @@
               ID
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              NOMBRE
+              TIPO LICENCIA
             </th>
 
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              IDENTIFICACIÓN
+              FECHA VENCIMIENTO
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              CORREO
+              CANTIDAD DE USUARIOS
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              TELEFONO
+              NOMBRE CLIENTE
             </th>
-            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
-              INSTITUCIÓN
-            </th>
+
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
               ACCIONES
             </th>
@@ -104,32 +96,29 @@
             </td>
             <td class="py-3 px-3 whitespace-normal break-words text-left">
               <h5 class="font-medium text-graydark dark:text-gray text-xs">
-                {{ item.nombre }} {{ item.apellidos }}
-              </h5>
-            </td>
-            <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray text-xs">
-                {{ item.identificacion }}
+                {{ item.tipo_licencia.tipo_licencia }}
               </h5>
             </td>
             <td class="py-3 px-3 whitespace-normal break-words text-left">
               <h5 class="font-medium text-graydark dark:text-gray text-xs">
-                {{ item.correo }}
-              </h5>
-            </td>
-            <td class="py-3 px-3 whitespace-nowrap text-left">
-              <h5 class="font-medium text-graydark dark:text-gray text-xs">
-                {{ item.telefono }}
+                {{ item.fecha_vencimiento }}
               </h5>
             </td>
             <td class="py-3 px-3 whitespace-normal break-words text-left">
               <h5 class="font-medium text-graydark dark:text-gray text-xs">
-                {{ item.cliente.institucion }}
+                {{ item.cantidad_usuarios }}
               </h5>
             </td>
 
+            <td class="py-3 px-3 whitespace-normal break-words text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-xs">
+                {{ item.cliente.nombre }} {{ item.cliente.apellidos }}
+              </h5>
+            </td>
+
+
             <td class="py-3 px-2 gap-2 whitespace-nowrap text-left flex flex-wrap items-center">
-              <a v-tooltip.bottom="'editar'" :href="'/docentes-edit/' + item.id"
+              <a v-tooltip.bottom="'editar'" :href="'/licencias-edit/' + item.id"
                 class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary/40 dark:text-white rounded-md shadow-md">
                 <PencilSquareIcon class="h-4 w-4 text-gray" />
               </a>
@@ -141,16 +130,17 @@
           </tr>
         </tbody>
         <tbody v-else class="w-full">
-                    
-                    <tr>
-                        <td class="w-auto"></td>
-                        <td class="w-auto"></td>
-                        <td class="w-auto flex justify-center items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
-                        <td class="w-auto"></td>
-                        <td class="w-auto"></td>
-                    </tr>
-                    
-                </tbody>
+
+          <tr>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+            <td class="w-auto flex justify-start items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+          </tr>
+
+        </tbody>
       </table>
 
       <!-- Paginador -->
@@ -166,8 +156,8 @@
   <!-- Modal -->
   <Modal :isOpen="ModalEliminar" @close="closeModal">
     <div class="p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
-      <h3 class="text-lg font-bold">Eliminar docente</h3>
-      <p class="text-sm mt-2">¿Estás seguro de eliminar este docente?</p>
+      <h3 class="text-lg font-bold">Eliminar licencia</h3>
+      <p class="text-sm mt-2">¿Estás seguro de eliminar esta licencia?</p>
       <div class="flex justify-end mt-4 gap-2">
         <button @click="submitEliminar"
           class="p-2 hover:scale-105 bg-danger/20 dark:bg-danger/40 dark:text-white rounded-md shadow-md">
@@ -185,7 +175,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, inject } from 'vue';
-import { BriefcaseIcon, ArchiveBoxIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
+import { CreditCardIcon, ArchiveBoxIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
 import axios from '../../../plugins/axios';
 import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia';
@@ -202,7 +192,7 @@ const { user } = storeToRefs(userStore);
 
 // Simulación de datos
 
-const totalDocentes = ref(0);
+const totalLicencias = ref(0);
 //info clientes
 const infoClientes = ref([]);
 // Modal
@@ -212,7 +202,6 @@ const idEliminar = ref(0);
 
 //pagiandor y search
 const usuarios = ref([]);
-const search = ref('');
 const cliente = ref(null);
 const perPage = ref(5);
 const page = ref(1);
@@ -230,7 +219,7 @@ const getTotales = async () => {
       },
     });
     console.log('Totales obtenidos:', response.data);
-    totalDocentes.value = response.data.Docentes;
+
     infoClientes.value = response.data.instituciones;
 
 
@@ -240,19 +229,19 @@ const getTotales = async () => {
 };
 
 const fetchUsuarios = async () => {
-  const response = await axios.get('/api/docentes', {
+  const response = await axios.get('/api/licencias', {
     params: {
-      search: search.value,
       cliente: cliente.value,
       per_page: perPage.value,
       page: page.value,
     },
   });
-  console.log('Usuarios obtenidos:', response.data.data);
+  console.log('Usuarios obtenidos:', response.data.data.data);
   console.log('Total de páginas:', response.data.data.last_page);
 
   usuarios.value = response.data.data.data;
   totalPages.value = response.data.data.last_page;
+  totalLicencias.value = response.data.data.total;
 };
 
 const changePage = (newPage: number) => {
@@ -260,14 +249,14 @@ const changePage = (newPage: number) => {
   fetchUsuarios();
 };
 
-const actuBycliente = () => {
-  page.value = 0;
-  fetchUsuarios();
-}; 
-
 const limpiar = () => {
   page.value = 0;
-  search.value = '';
+  cliente.value = null;
+  fetchUsuarios();
+};
+
+const actuBycliente = () => {
+  page.value = 0;
   fetchUsuarios();
 };
 
@@ -279,20 +268,19 @@ const eliminarDocente = (id: number) => {
 
 const submitEliminar = async () => {
   try {
-    const response = await axios.delete(`/api/docentes/${idEliminar.value}`, {
+    const response = await axios.delete(`/api/licencias/${idEliminar.value}`, {
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
         'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
       },
     });
-    console.log('Docente eliminado:', response.data);
     swal.fire({
       icon: 'success',
-      title: 'Docente eliminado con éxito',
+      title: 'Grupo eliminado con éxito',
       html: `
         <p>${response.data.message}</p>
-        <p><strong>Docente:</strong> ${response.data.data.nombre} ${response.data.data.apellidos}</p>`,
+      `,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
@@ -321,6 +309,7 @@ const submitEliminar = async () => {
       didClose: () => {
         ModalEliminar.value = false;
         idEliminar.value = 0;
+
       }
 
     });

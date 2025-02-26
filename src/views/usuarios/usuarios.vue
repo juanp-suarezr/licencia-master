@@ -76,10 +76,10 @@
       </div>
       <select v-model="perPage" @change="fetchUsuarios"
         class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
-        <option v-if="totalUsuarios >= 5" :value="5">5</option>
-        <option v-if="totalUsuarios >= 10" :value="10">10</option>
-        <option v-if="totalUsuarios >= 15" :value="15">15</option>
-        <option v-if="totalUsuarios >= 20" :value="20">20</option>
+        <option>5</option>
+        <option v-if="totalUsuarios >= 6" :value="10">10</option>
+        <option v-if="totalUsuarios >= 11" :value="15">15</option>
+        <option v-if="totalUsuarios >= 16" :value="20">20</option>
       </select>
     </div>
     <div class="overflow-x-auto mt-4">

@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex justify-start">
-        <breadcrumb-default pageTitle="Juegos" pageSubtitle="Parámetros" path="parametros"></breadcrumb-default>
+        <breadcrumb-default pageTitle="Nivel de juegos" pageSubtitle="Parámetros" path="parametros"></breadcrumb-default>
     </div>
     <div class="w-full flex flex-wrap items-center">
         <!-- total clientes -->
@@ -22,13 +22,14 @@
     <!-- tabla parametro -->
     <div class="w-full mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
         <div class="flex flex-wrap justify-between items-center pe-2">
-            <h2 class="mt-2 px-4 text-base">Juegos</h2>
+            <h2 class="mt-2 px-4 text-base">Nivel de juegos</h2>
             <button @click="openAddModal"
                 class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md">
                 + Añadir
             </button>
         </div>
         <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
+
             <div class="flex flex-wrap gap-2 mb-2">
                 <input v-model="search" @keyup.enter="resetPagination"
                     class="p-2 rounded-md bg-gray dark:bg-graydark placeholder:text-xs shadow-md"
@@ -42,6 +43,7 @@
                     Limpiar
                 </button>
             </div>
+
             <div class="flex flex-wrap gap-4">
                 <select v-model="estado" @change="resetPagination"
                     class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
@@ -59,6 +61,7 @@
                     <option v-if="totalParametros >= 16" :value="20">20</option>
                 </select>
             </div>
+
         </div>
         <div class="overflow-x-auto mt-4">
             <table class="table-auto w-full bg-white dark:bg-boxdark text-sm">
@@ -221,7 +224,7 @@ const closeAddModal = () => {
 
 const fetchParametro = async () => {
     
-    const response = await axios.get('/api/parametros/juegos', {
+    const response = await axios.get('/api/parametros/nivel-juegos', {
         params: {
             search: search.value,
             estado: estado.value,
@@ -263,7 +266,7 @@ const eliminarParametro = (id: number) => {
 
 const submitEliminar = async () => {
     try {
-        const response = await axios.delete(`/api/parametros/juegos/${idEliminar.value}`);
+        const response = await axios.delete(`/api/parametros/nivel-juegos/${idEliminar.value}`);
         console.log('Parámetro eliminado:', response.data);
         swal.fire({
             icon: 'success',
@@ -304,7 +307,7 @@ const submitEliminar = async () => {
 
 const DesbloquearParametro = async (idDesbloq) => {
     try {
-        const response = await axios.put(`/api/parametros/juegos/unlock/${idDesbloq}`);
+        const response = await axios.put(`/api/parametros/nivel-juegos/unlock/${idDesbloq}`);
         console.log('Parámetro recuperado:', response.data);
         swal.fire({
             icon: 'success',
@@ -352,7 +355,7 @@ const submitAddParametro = async () => {
     }
 
     try {
-        const response = await axios.post('/api/parametros/juegos', newParametro.value, {
+        const response = await axios.post('/api/parametros/nivel-juegos', newParametro.value, {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',

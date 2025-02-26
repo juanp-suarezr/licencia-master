@@ -10,9 +10,20 @@ import DocentesEdit from '../views/usuarios/docentes/edit.vue'
 import Estudiantes from '../views/usuarios/estudiantes/index.vue'
 import EstudiantesCreate from '../views/usuarios/estudiantes/add.vue'
 import EstudiantesEdit from '../views/usuarios/estudiantes/edit.vue'
+import Grupos from '../views/usuarios/grupos/index.vue'
+import GruposCreate from '../views/usuarios/grupos/add.vue'
+import GruposEdit from '../views/usuarios/grupos/edit.vue'
+import Licencias from '../views/licencias/licencias/index.vue'
+import LicenciasCreate from '../views/licencias/licencias/add.vue'
+import LicenciasEdit from '../views/licencias/licencias/edit.vue'
+import TipoLicencias from '../views/licencias/tipoLicencias/index.vue'
+import TipoLicenciasCreate from '../views/licencias/tipoLicencias/add.vue'
+import TipoLicenciasEdit from '../views/licencias/tipoLicencias/edit.vue'  
+
 import Roles from '../views/roles/Index.vue'
 import RolesCreate from '../views/roles/add.vue'
 import RolesEdit from '../views/roles/edit.vue'
+
 import juegos from '../views/juegos/Index.vue'
 import juegosCreate from '../views/juegos/add.vue'
 import Parametros from '../views/parametros/Index.vue'
@@ -22,6 +33,9 @@ import ParametrosJuegos from '../views/parametros/juegos/Index.vue'
 import ParametrosLocacionJuegos from '../views/parametros/locacion_juegos/Index.vue'
 import ParametrosMisionJuegos from '../views/parametros/mision_juegos/Index.vue'
 import ParametrosSubambiente from '../views/parametros/subambiente_juegos/Index.vue'
+import ParametrosNivelJuegos from '../views/parametros/nivel_juegos/Index.vue'
+import ParametrosHabilidadesCognitivas from '../views/parametros/habilidades_cognitivas_juegos/Index.vue'
+import ParametrosMetaCurricular from '../views/parametros/meta_curricular_juegos/Index.vue'
 import Login from '../views/auth/Login.vue'
 
 const routes = [
@@ -44,9 +58,20 @@ const routes = [
       { path: 'estudiantes', name: 'estudiantes', title: 'Estudiantes', meta: 'estudiantes', component: Estudiantes },
       { path: 'estudiantes-create', name: 'EstudiantesCreate', title: 'Nuevo Estudiante', meta: 'estudiantes', component: EstudiantesCreate },
       { path: 'estudiantes-edit/:id', name: 'EstudiantesEdit', title: 'Editar Estudiante', meta: 'estudiantes', component: EstudiantesEdit },
-      //Licencias
-      //Tipo licencias
       //Grupos
+      { path: 'grupos', name: 'Grupos', title: 'Grupos', meta: 'grupos', component: Grupos },
+      { path: 'grupos-create', name: 'GruposCreate', title: 'Nuevo Grupo', meta: 'grupos', component: GruposCreate },
+      { path: 'grupos-edit/:id', name: 'GruposEdit', title: 'Editar Grupo', meta: 'grupos', component: GruposEdit },
+      //Licencias
+      { path: 'licencias', name: 'Licencias', title: 'Licencias', meta: 'licencias', component: Licencias },
+      { path: 'licencias-create', name: 'LicenciasCreate', title: 'Nueva Licencia', meta: 'licencias', component: LicenciasCreate },
+      { path: 'licencias-edit/:id', name: 'LicenciasEdit', title: 'Editar Licencia', meta: 'licencias', component: LicenciasEdit },
+
+      //Tipo licencias
+      { path: 'tipo-licencias', name: 'TipoLicencias', title: 'Tipo Licencias', meta: 'tipo-licencias', component: TipoLicencias },
+      { path: 'tipo-licencias-create', name: 'TipoLicenciasCreate', title: 'Nuevo Tipo Licencia', meta: 'tipo-licencias', component: TipoLicenciasCreate },
+      { path: 'tipo-licencias-edit/:id', name: 'TipoLicenciasEdit', title: 'Editar Tipo Licencia', meta: 'tipo-licencias', component: TipoLicenciasEdit },
+      
       //juegos
       { path: 'juegos', name: 'juegos', title: 'Juegos', meta: 'juegos', component: juegos },
       { path: 'juegos-create', name: 'JuegosCreate', title: 'Nuevo Juego', meta: 'juegos', component: juegosCreate },
@@ -64,6 +89,12 @@ const routes = [
       { path: 'parametros-mision-juegos', name: 'ParametrosMisionJuegos', title: 'Parámetros Misión Juegos', meta: 'parametros', component: ParametrosMisionJuegos },
       //subambiente juegos
       { path: 'parametros-subambiente', name: 'ParametrosSubambiente', title: 'Parámetros Sub-ambiente Juegos', meta: 'parametros', component: ParametrosSubambiente },
+      //nivel juegos
+      { path: 'parametros-nivel-juegos', name: 'ParametrosNivelJuegos', title: 'Parámetros Nivel Juegos', meta: 'parametros', component: ParametrosNivelJuegos },
+      //habilidades cognitivas
+      { path: 'parametros-habilidades-cognitivas', name: 'ParametrosHabilidadesCognitivas', title: 'Parámetros Habilidades Cognitivas', meta: 'parametros', component: ParametrosHabilidadesCognitivas },
+      //meta curricular
+      { path: 'parametros-meta-curricular', name: 'ParametrosMetaCurricular', title: 'Parámetros Meta Curricular', meta: 'parametros', component: ParametrosMetaCurricular },
       //Roles
       { path: 'roles', name: 'roles', title: 'Roles', meta: 'roles', component: Roles },
       { path: 'roles-create', name: 'RolesCreate', title: 'Nuevo Rol', meta: 'roles', component: RolesCreate },

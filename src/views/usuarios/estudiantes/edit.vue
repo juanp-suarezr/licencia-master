@@ -5,18 +5,21 @@
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
     <h2 class="text-lg font-bold mb-4">Editar Estudiante</h2>
     <form @submit.prevent="editarEstudiantes">
+      <!-- nombre -->
       <div class="mb-4">
         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
         <input v-model="estudiante.nombre" type="text" id="nombre"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- apellidos -->
       <div class="mb-4">
         <label for="apellidos" class="block text-sm font-medium text-gray-700">Apellidos</label>
         <input v-model="estudiante.apellidos" type="text" id="apellidos"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- genero -->
       <div class="mb-4">
         <label for="genero" class="block text-sm font-medium text-gray-700">Genero</label>
         <div class="flex items-center mt-2 gap-2">
@@ -29,6 +32,7 @@
 
         </div>
       </div>
+      <!-- grupo -->
       <div class="mb-4">
         <label for="grupo_id" class="block text-sm font-medium text-gray-700">{{estudiante.isGrupo ? 'Editar grupo' : 'Asignar grupo (opcional)'}}</label>
         <div class="flex flex-wrap gap-4 w-full mt-2">
@@ -51,15 +55,28 @@
         </div>
 
       </div>
-      
-
-
+      <!-- grado -->
+      <div class="mb-4">
+        <label for="grado" class="block text-sm font-medium text-gray-700">Grado (Default = 0)</label>
+        <input v-model="estudiante.grado" type="text" id="grado"
+          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+          required />
+      </div>
+      <!-- edad -->
+      <div class="mb-4">
+        <label for="edad" class="block text-sm font-medium text-gray-700">Edad (Default = 0)</label>
+        <input v-model="estudiante.edad" type="text" id="edad"
+          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+          required />
+      </div>
+      <!-- correo -->
       <div class="mb-4">
         <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
         <input v-model="estudiante.correo" type="email" id="correo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- password -->
       <div class="mb-4">
         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
         <div class="flex flex-wrap gap-4 w-full mt-2">
@@ -109,6 +126,8 @@ const estudiante = ref({
   nombre: '',
   apellidos: '',
   correo: '',
+  edad: 0,
+  grado: 0,
   actu_password: false,
   password: '',
   genero: '', 
@@ -158,6 +177,32 @@ const changeStatePaswword = () => {
 
 };
 
+watch(() => estudiante.value.grado, (value: number) => {
+  if (value) {
+    switch (value) {
+      case 1:
+        estudiante.value.edad = 6;
+        break;
+        case 2:
+        estudiante.value.edad = 7;
+        break;
+        case 3:
+        estudiante.value.edad = 8;
+        break;
+        case 4:
+        estudiante.value.edad = 9;
+        break;
+        case 5:
+        estudiante.value.edad = 10;
+        break;
+    
+      default:
+        
+        break;
+    }
+  }
+});
+
 const fetchestudiante = async (id: number) => {
   try {
     const response = await axios.get(`/api/estudiantes/${id}`);
@@ -188,6 +233,8 @@ const asignarEstudiante = (data: any) => {
     nombre: data.nombre,
     apellidos: data.apellidos,
     genero: data.user.player.genero,
+    grado: data.user.player.grado,
+    edad: data.edad,
     correo: data.correo,
     actu_password: false,
     password: '123456789',

@@ -24,8 +24,8 @@
       </div>
       <!-- icono -->
       <div class="w-auto flex items-center justify-end">
-        <span class="bg-danger/20 shadow-lg p-2 rounded-md">
-          <UserIcon class="h-6 w-6 text-danger/40" />
+        <span class="bg-warning/20 shadow-lg p-2 rounded-md">
+          <AcademicCapIcon class="h-6 w-6 text-warning/40" />
         </span>
       </div>
     </div>
@@ -60,9 +60,9 @@
       <select v-model="perPage" @change="fetchUsuarios" v-if="totalEstudiantes > 5"
         class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
         <option :value="5">5</option>
-        <option v-if="totalEstudiantes >= 10" :value="10">10</option>
-        <option v-if="totalEstudiantes >= 15" :value="15">15</option>
-        <option v-if="totalEstudiantes >= 20" :value="20">20</option>
+        <option v-if="totalEstudiantes >= 6" :value="10">10</option>
+        <option v-if="totalEstudiantes >= 11" :value="15">15</option>
+        <option v-if="totalEstudiantes >= 16" :value="20">20</option>
       </select>
     </div>
     <div class="overflow-x-auto mt-4">
@@ -133,6 +133,18 @@
             </td>
           </tr>
         </tbody>
+        <tbody v-else class="w-full">
+                    
+                    <tr>
+                        <td class="w-auto"></td>
+                        <td class="w-auto"></td>
+                        <td class="w-auto"></td>
+                        <td class="w-auto flex justify-start items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
+                        <td class="w-auto"></td>
+                        <td class="w-auto"></td>
+                    </tr>
+                    
+                </tbody>
       </table>
 
       <!-- Paginador -->
@@ -167,7 +179,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, inject } from 'vue';
-import { UserIcon, ArchiveBoxIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
+import { AcademicCapIcon, ArchiveBoxIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
 import axios from '../../../plugins/axios';
 import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia';

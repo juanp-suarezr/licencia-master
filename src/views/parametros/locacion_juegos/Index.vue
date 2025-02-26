@@ -55,9 +55,9 @@
                 <select v-model="perPage" @change="resetPagination"
                     class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
                     <option :value="5">5</option>
-                    <option v-if="totalParametros >= 10" :value="10">10</option>
-                    <option v-if="totalParametros >= 15" :value="15">15</option>
-                    <option v-if="totalParametros >= 20" :value="20">20</option>
+                    <option v-if="totalParametros >= 6" :value="10">10</option>
+                    <option v-if="totalParametros >= 11" :value="15">15</option>
+                    <option v-if="totalParametros >= 16" :value="20">20</option>
                 </select>
             </div>
         </div>

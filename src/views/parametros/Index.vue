@@ -13,10 +13,10 @@
             <h2 class="px-4 text-base">Parámetros</h2>
             <select v-model="perPage" @change="updatePagination" v-if="totalParametros > 6"
                 class="p-2 rounded-md bg-gray dark:bg-graydark justify-end shadow-md">
-                <option :value="6">6</option>
-                <option v-if="totalParametros >= 10" :value="10">10</option>
-                <option v-if="totalParametros >= 15" :value="15">15</option>
-                <option v-if="totalParametros >= 20" :value="20">20</option>
+                <option :value="5">5</option>
+                <option v-if="totalParametros >= 6" :value="10">10</option>
+                <option v-if="totalParametros >= 11" :value="15">15</option>
+                <option v-if="totalParametros >= 16" :value="20">20</option>
             </select>
 
         </div>
@@ -100,7 +100,7 @@ const totalParametros = ref(0);
 
 //paginador y search
 const parametros = ref([]);
-const perPage = ref(6);
+const perPage = ref(5);
 const currentPage = ref(1);
 const totalPages = ref(1);
 

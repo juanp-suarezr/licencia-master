@@ -6,18 +6,21 @@
   <div class="w-full p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
     <h2 class="text-lg font-bold mb-4">Crear Nuevo Estudante</h2>
     <form @submit.prevent="crearEstudiante">
+      <!-- nombre -->
       <div class="mb-4">
         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
         <input v-model="estudiante.name" type="text" id="nombre"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- apellido -->
       <div class="mb-4">
         <label for="apellidos" class="block text-sm font-medium text-gray-700">Apellidos</label>
         <input v-model="estudiante.apellidos" type="text" id="apellidos"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- Genero -->
       <div class="mb-4">
         <label for="genero" class="block text-sm font-medium text-gray-700">Genero</label>
         <div class="flex items-center mt-2 gap-2">
@@ -30,7 +33,7 @@
 
         </div>
       </div>
-
+      <!-- Asignar cliente -->
       <div class="mb-4">
         <label for="id_cliente" class="block text-sm font-medium text-gray-700 mb-2">Asignar cliente</label>
         <select id="id_cliente" v-model="estudiante.id_cliente" required
@@ -41,7 +44,7 @@
 
         </select>
       </div>
-
+      <!-- Grupo -->
       <div class="mb-4">
         <label for="grupo_id" class="block text-sm font-medium text-gray-700">Seleccionar grupo (opcional)</label>
         <div class="flex flex-wrap gap-4 w-full mt-2">
@@ -64,14 +67,29 @@
         </div>
 
       </div>
+      <!-- grado -->
+      <div class="mb-4">
+        <label for="grado" class="block text-sm font-medium text-gray-700">Grado (Default = 0)</label>
+        <input v-model="estudiante.grado" type="number" id="grado"
+          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+          required />
+      </div>
+      <!-- edad -->
+      <div class="mb-4">
+        <label for="edad" class="block text-sm font-medium text-gray-700">Edad (Default = 0)</label>
+        <input v-model="estudiante.edad" type="text" id="edad"
+          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+          required />
+      </div>
 
-
+      <!-- Correo -->
       <div class="mb-4">
         <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
         <input v-model="estudiante.email" type="email" id="correo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           required />
       </div>
+      <!-- contraseña -->
       <div class="mb-4">
         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
         <input v-model="estudiante.password" type="password" id="password"
@@ -82,7 +100,7 @@
         <button type="button" @click="regresar" class="px-4 py-2 bg-graydark text-white rounded-md shadow-sm">
           Regresar
         </button>
-        <button type="submit"
+        <button type="submit" loading="loading"
           class="px-4 py-2 bg-blue-500 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white">
           Crear estudiante
         </button>
@@ -107,6 +125,8 @@ const estudiante = ref({
   name: '',
   apellidos: '',
   email: '',
+  grado: 0,
+  edad: 0,
   isGrupo: false,
   grupo_id: '',
   id_cliente: '',
@@ -114,6 +134,8 @@ const estudiante = ref({
   genero: '',
 
 });
+
+const loading = ref(false);
 
 watch(() => estudiante.value.id_cliente, (value: string) => {
   if (value) {
@@ -125,6 +147,32 @@ const changeStateGrupo = () => {
   estudiante.value.isGrupo = !estudiante.value.isGrupo;
   estudiante.value.grupo_id = '';
 };
+
+watch(() => estudiante.value.grado, (value: number) => {
+  if (value) {
+    switch (value) {
+      case 1:
+        estudiante.value.edad = 6;
+        break;
+        case 2:
+        estudiante.value.edad = 7;
+        break;
+        case 3:
+        estudiante.value.edad = 8;
+        break;
+        case 4:
+        estudiante.value.edad = 9;
+        break;
+        case 5:
+        estudiante.value.edad = 10;
+        break;
+    
+      default:
+        estudiante.value.edad = 0;
+        break;
+    }
+  }
+});
 
 const getTotales = async () => {
   try {
@@ -165,7 +213,7 @@ const getGrupos = async (value: string) => {
 
 const crearEstudiante = async () => {
   try {
-
+    loading.value = true;
     const response = await axios.post('/api/estudiantes', JSON.stringify(estudiante.value), {
       headers: {
         'Content-Type': 'application/json',
@@ -176,7 +224,7 @@ const crearEstudiante = async () => {
 
     console.log(response);
 
-
+    loading.value = false;
     swal.fire({
       icon: 'success',
       title: 'Estudiante registrado con éxito',
@@ -195,7 +243,7 @@ const crearEstudiante = async () => {
     });
     // Puedes agregar una lógica para redirigir o limpiar el formulario
   } catch (error) {
-
+    loading.value = false;
     console.error('Error al crear estudiante:', error);
     swal.fire({
       icon: 'error',
