@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex justify-start">
-    <breadcrumb-default pageTitle="Clientes"></breadcrumb-default>
+    <breadcrumb-default pageTitle="Docentes"></breadcrumb-default>
   </div>
   <div class="w-full flex flex-wrap items-center sm:grid grid-cols-2 gap-2">
     <!-- seleccionar cliente -->
@@ -143,9 +143,11 @@
         <tbody v-else class="w-full">
                     
                     <tr>
+                      <td class="w-auto"></td>
                         <td class="w-auto"></td>
                         <td class="w-auto"></td>
                         <td class="w-auto flex justify-center items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
+                        <td class="w-auto"></td>
                         <td class="w-auto"></td>
                         <td class="w-auto"></td>
                     </tr>
@@ -230,7 +232,7 @@ const getTotales = async () => {
       },
     });
     console.log('Totales obtenidos:', response.data);
-    totalDocentes.value = response.data.Docentes;
+    
     infoClientes.value = response.data.instituciones;
 
 
@@ -253,6 +255,7 @@ const fetchUsuarios = async () => {
 
   usuarios.value = response.data.data.data;
   totalPages.value = response.data.data.last_page;
+  totalDocentes.value = response.data.data.total;
 };
 
 const changePage = (newPage: number) => {

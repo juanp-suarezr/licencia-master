@@ -44,7 +44,7 @@
           </router-link>
         </li>
         <!-- docentes -->
-        <li v-if="isAuthenticated && user.rol == 'Administrador' || user.rol == 'Docente'">
+        <li v-if="isAuthenticated && user.rol == 'Administrador' || user.rol == 'Cliente'">
           <router-link to="/docentes" class="flex items-center gap-2 ps-4 px-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActive('/docentes') }">
             <BriefcaseIcon class="h-4 w-4" /> Docentes
@@ -79,7 +79,7 @@
         class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestión de licencias
       </h3>
-      <!-- Clientes, docentes, estudiantes -->
+      <!-- LICENCIAS -->
       <ul class="">
         <!-- licencias -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
@@ -102,7 +102,7 @@
         class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestion de juegos
       </h3>
-      <!-- Clientes, docentes, estudiantes -->
+      <!-- JUEGOS -->
       <ul class="">
         <!-- juegos -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">
@@ -125,7 +125,7 @@
         class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
         Gestion de roles
       </h3>
-      <!-- Clientes, docentes, estudiantes -->
+      <!-- ROLES -->
       <ul class="">
         <!-- Roles -->
         <li v-if="isAuthenticated && user.rol == 'Administrador'">

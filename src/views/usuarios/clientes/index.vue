@@ -134,16 +134,18 @@
           </tr>
         </tbody>
         <tbody v-else class="w-full">
-                    
-                    <tr>
-                        <td class="w-auto"></td>
-                        <td class="w-auto"></td>
-                        <td class="w-auto flex justify-center items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
-                        <td class="w-auto"></td>
-                        <td class="w-auto"></td>
-                    </tr>
-                    
-                </tbody>
+
+          <tr>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+            <td class="w-auto flex justify-center items-center py-5 "><em class="sm:text-xl">No hay registros</em></td>
+            <td class="w-auto"></td>
+            <td class="w-auto"></td>
+          </tr>
+
+        </tbody>
       </table>
 
       <!-- Paginador -->
@@ -281,7 +283,7 @@ const submitEliminar = async () => {
         window.location.reload();
       }
 
-    });  
+    });
 
   } catch (error) {
     console.error('Error al eliminar cliente:', error);

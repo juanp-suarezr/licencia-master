@@ -31,7 +31,7 @@
           required />
       </div>
       
-      <div class="mb-4">
+      <div class="mb-4" v-if="isAuthenticated && user.rol == 'Administrador'">
         <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-2">Asignar cliente</label>
         <select id="cliente_id" v-model="docente.cliente_id" required
         class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-4 p-2 w-full whitespace-normal break-words">
@@ -71,8 +71,14 @@
 import { ref, inject, onMounted } from 'vue';
 import axios from '../../../plugins/axios';
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
+import { useUserStore } from '@/store/auth';
+import { storeToRefs } from 'pinia';
 import Swal from 'sweetalert2';
 const swal = inject('$swal') as typeof Swal;
+
+// Usar el store de usuarios
+const userStore = useUserStore();
+const { isAuthenticated, user, error_user } = storeToRefs(userStore);
 
 //info clientes
 const infoClientes = ref([]);
@@ -87,6 +93,8 @@ const docente = ref({
   password: '',
  
 });
+
+docente.value.cliente_id = user.value.cliente ?? '';
 
 const getTotales = async () => {
   try {

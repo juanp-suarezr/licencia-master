@@ -27,6 +27,8 @@ export const useUserStore = defineStore('user_auth', {
 
         sessionStorage.setItem('access_token', accessToken)
         sessionStorage.setItem('id_user', id_user)
+        
+        
         this.user = response.data.user_info
         this.isAuthenticated = true
       } catch (error) {

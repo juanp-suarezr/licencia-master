@@ -216,7 +216,7 @@ const getTotales = async () => {
       },
     });
     console.log('Totales obtenidos:', response.data);
-    totalGrupos.value = response.data.Grupos;
+    
     infoClientes.value = response.data.instituciones;
 
 
@@ -239,6 +239,7 @@ const fetchUsuarios = async () => {
 
   usuarios.value = response.data.data.data;
   totalPages.value = response.data.data.last_page;
+  totalGrupos.value = response.data.data.total;
 };
 
 const changePage = (newPage: number) => {

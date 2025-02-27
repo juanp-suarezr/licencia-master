@@ -10,16 +10,22 @@
     <div class="relative my-auto items-center">
 
       <button @click="toggleDropdown" class="dark:text-white text-graydark focus:outline-none">
+        <div class="" v-if="user?.logo">
+          <Avatar class="w-auto h-16 p-1 bg-transparent avatar-image dark:avatar-image-dark" :image="getImage(user?.logo)" shape="circle" />
+        </div>
+        <div class="" v-else>
+          
+          <Avatar class="w-16 h-16 p-1 dark:hidden" :image="userWhite" shape="circle" />
+          <Avatar class="w-16 h-16 p-1 hidden dark:block" :image="userIcon" shape="circle" />
+        </div>
 
-        <Avatar class="w-16 h-16 p-1 dark:hidden" :image="userWhite" shape="circle" />
-        <Avatar class="w-16 h-16 p-1 hidden dark:block" :image="userIcon" shape="circle" />
       </button>
       <div v-if="dropdownOpen"
         class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg py-1 z-100">
         <div class="flex gap-2 px-4 py-2 items-center border-b-2 dark:border-slate-600 border-gray">
           <Avatar class="w-16 h-16 p-1 dark:hidden" :image="userWhite" shape="circle" />
           <Avatar class="w-16 h-16 dark:bg-gray p-1 hidden dark:block" :image="userIcon" shape="circle" />
-          <div class="dark:text-white text-graydark flex flex-col items-center">
+          <div class="dark:text-white text-graydark flex flex-col items-start text-xs">
             <p v-if="isAuthenticated">{{ user?.name }}</p>
             <p class="text-xs" v-if="isAuthenticated">{{ user?.rol }}</p>
           </div>
@@ -79,10 +85,20 @@ const logout = async () => {
 
   }
 
+};
+
+const getImage = function (name: string) {
+  return `http://127.0.0.1:8000/uploads/instituciones/${name}`;
 
 };
 </script>
 
 <style scoped>
-/* Asegúrate de que el dropdown tenga un fondo sólido */
+.avatar-image {
+  filter: brightness(0.7);
+}
+
+.dark .avatar-image {
+  filter: brightness(1);
+}
 </style>

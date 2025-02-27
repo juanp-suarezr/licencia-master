@@ -15,7 +15,7 @@
       </div>
       
       <!-- Asignar cliente -->
-      <div class="mb-4">
+      <div class="mb-4" v-if="isAuthenticated && user.rol == 'Administrador'">
         <label for="id_cliente" class="block text-sm font-medium text-gray-700 mb-2">Asignar cliente</label>
         <select id="id_cliente" v-model="grupo.id_cliente" required
           class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-4 p-2 w-full whitespace-normal break-words">
@@ -66,13 +66,19 @@
 import { ref, inject, onMounted, watch } from 'vue';
 import axios from '../../../plugins/axios';
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
+import { useUserStore } from '@/store/auth'
+import { storeToRefs } from 'pinia';
 import Swal from 'sweetalert2';
 const swal = inject('$swal') as typeof Swal;
+
+const userStore = useUserStore()
+const { user, isAuthenticated } = storeToRefs(userStore);
 
 //info clientes
 const infoClientes = ref([]);
 //info grupos
 const infoDocentes = ref([]);
+
 
 const grupo = ref({
   nombre_grupo: '',
@@ -82,6 +88,8 @@ const grupo = ref({
   
 
 });
+
+grupo.value.id_cliente = user.value.cliente ?? '';
 
 const loading = ref(false);
 
@@ -130,6 +138,11 @@ const getDocentes = async (value: string) => {
   } catch (error) {
     console.error('Error al obtener grupos:', error);
   }
+}
+
+if (user.value.rol == 'Cliente') {
+  getDocentes(user.value.cliente);
+  
 }
 
 

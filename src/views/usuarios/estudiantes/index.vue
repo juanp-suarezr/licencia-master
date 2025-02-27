@@ -224,7 +224,7 @@ const getTotales = async () => {
       },
     });
     console.log('Totales obtenidos:', response.data);
-    totalEstudiantes.value = response.data.Estudiantes;
+    
     infoClientes.value = response.data.instituciones;
 
 
@@ -247,6 +247,7 @@ const fetchUsuarios = async () => {
 
   usuarios.value = response.data.data.data;
   totalPages.value = response.data.data.last_page;
+  totalEstudiantes.value = response.data.data.total;
 };
 
 const changePage = (newPage: number) => {

@@ -1,5 +1,5 @@
 <template>
-  <AuthLayout>
+  
     <div
       class="flex flex-col"
     >
@@ -42,7 +42,7 @@
 
 
     </div>
-  </AuthLayout>
+  
 </template>
 
 <script lang="ts" setup>
