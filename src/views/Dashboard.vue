@@ -254,7 +254,7 @@
         <!-- rol docente -->
         <div v-if="isAuthenticated && user.rol == 'Docente'" class="md:grid gap-6 md:grid-cols-5">
 
-          <!-- info cliente -->
+          <!-- info docente -->
           <div class="md:col-span-2 px-4 h-full bg-white dark:bg-graydark rounded-lg shadow-md mb-4 sm:mb-0">
             <div class="w-full h-full grid grid-cols-5">
               <div class="col-span-4 w-full items-center mt-2">
