@@ -327,7 +327,7 @@
             <label for="grupo" class="block text-sm font-medium text-gray-700">Seleccionar grupo</label>
             <select id="grupo" v-model="selectedGroup" required
               class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-1 w-auto whitespace-normal break-words">
-              <option class="" value="" disabled>Seleccionar cliente</option>
+              <option class="" value="" disabled>Seleccionar grupo</option>
               <option class="" v-for="(item, index) in InfoTotalDocente.grupos" :key="item.id" :value="index">{{
                 item.nombre_grupo }} </option>
 

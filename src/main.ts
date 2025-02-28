@@ -8,6 +8,7 @@ import router from './router'
 import store from './store'
 import PrimeVue from 'primevue/config'
 import { LoadingPlugin } from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css';
 import Lara from '@/presets/lara'
 import Traduccion from './lang/en/prime_en.json'
 import './plugins/axios'
