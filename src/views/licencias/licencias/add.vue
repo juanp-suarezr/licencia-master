@@ -20,11 +20,13 @@
       </div>
 
       <!-- Tipo de licencia -->
-      <div class="mb-4">
+      <div class="mb-4" v-if="tiposLicencias.length > 0">
+        
         <label for="tipo_licencia" class="block text-sm font-medium text-gray-700 mb-2">Tipo de licencia</label>
         <select id="tipo_licencia" v-model="grupo.tipo_licencia_id" required
           class="text-xs md:text-base border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray justify-end py-4 p-2 w-full whitespace-normal break-words">
           <option class="" value="" disabled>Seleccionar tipo de licencia</option>
+          
           <option class="" v-for="item in tiposLicencias" :key="item.id" :value="item.id">{{ item.tipo_licencia }}
           </option>
         </select>
@@ -119,7 +121,9 @@ const getTiposLicencias = async () => {
     });
     console.log('Tipos de licencias obtenidos:', response.data);
 
-    tiposLicencias.value = response.data.data;
+    tiposLicencias.value = response.data.data.data;
+    console.log(tiposLicencias.value);
+    
   } catch (error) {
     console.error('Error al obtener tipos de licencias:', error);
   }
