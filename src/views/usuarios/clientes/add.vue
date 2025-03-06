@@ -6,35 +6,35 @@
     <h2 class="text-lg font-bold mb-4">Crear Nuevo Cliente</h2>
     <form @submit.prevent="crearCliente">
       <div class="mb-4">
-        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre (opcional)</label>
         <input v-model="cliente.name" type="text" id="nombre"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+          />
       </div>
       <div class="mb-4">
-        <label for="apellidos" class="block text-sm font-medium text-gray-700">Apellidos</label>
+        <label for="apellidos" class="block text-sm font-medium text-gray-700">Apellidos (opcional)</label>
         <input v-model="cliente.apellidos" type="text" id="apellidos"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+          />
       </div>
       <div class="mb-4">
-        <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación</label>
+        <label for="identificacion" class="block text-sm font-medium text-gray-700">Identificación (opcional)</label>
         <input v-model="cliente.identificacion" type="number" id="identificacion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+          />
       </div>
       <div class="mb-4">
-        <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
+        <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección (opcional)</label>
         <input v-model="cliente.direccion" type="text" id="direccion"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+        />
       </div>
 
       <div class="mb-4">
-        <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+        <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono (opcional)</label>
         <input v-model="cliente.telefono" type="number" id="telefono"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+          />
       </div>
       <div class="mb-4">
         <label for="pais" class="block text-sm font-medium text-gray-700">País</label>
@@ -43,10 +43,10 @@
           required />
       </div>
       <div class="mb-4">
-        <label for="ciudad" class="block text-sm font-medium text-gray-700">Ciudad</label>
+        <label for="ciudad" class="block text-sm font-medium text-gray-700">Ciudad (opcional)</label>
         <input v-model="cliente.ciudad" type="text" id="ciudad"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+          />
       </div>
       <div class="mb-4">
         <label for="institucion" class="block text-sm font-medium text-gray-700">Institución</label>
@@ -55,7 +55,7 @@
           required />
       </div>
       <div class="mb-4">
-        <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
+        <label for="logo" class="block text-sm font-medium text-gray-700">Logo (opcional)</label>
         <input @change="onFileChange" type="file" id="logo"
           class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
           accept="image/*" />
