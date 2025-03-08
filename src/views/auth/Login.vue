@@ -56,8 +56,8 @@ const userStore = useUserStore()
 const darkModeStore = useDarkModeStore()
 
 const login = ref({
-    email: 'AZProyects@gmail.com',
-    password: '12345678'
+    email: '',
+    password: ''
 })
 const router = useRouter()
 const loading = ref(false)
