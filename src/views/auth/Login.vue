@@ -34,10 +34,13 @@
         </div>
         <button
           type="submit"
-          class="w-full dark:bg-slate-500 bg-blue-400 hover:!bg-slate-800 text-white font-bold py-2 px-4 rounded"
+          class="w-full dark:bg-slate-500 bg-blue-400 hover:!bg-slate-800 text-white font-bold py-2 px-4 rounded mb-1"
         >
           Iniciar Sesión
         </button>
+        <a>
+          <router-link to="/password-reset-form" class="text-sm text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Olvidaste tu contraseña?</router-link>
+        </a>
       </form>
 
 

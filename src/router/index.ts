@@ -36,7 +36,8 @@ import ParametrosSubambiente from '../views/parametros/subambiente_juegos/Index.
 import ParametrosNivelJuegos from '../views/parametros/nivel_juegos/Index.vue'
 import ParametrosHabilidadesCognitivas from '../views/parametros/habilidades_cognitivas_juegos/Index.vue'
 import ParametrosMetaCurricular from '../views/parametros/meta_curricular_juegos/Index.vue'
-import Login from '../views/auth/Login.vue'
+import Login from '../views/auth/Login.vue';
+import ResetPassword from '../views/auth/ResetPassword.vue';
 
 const routes = [
   {
@@ -108,12 +109,15 @@ const routes = [
   {
     path: '/login',
     component: () => import('../layouts/AuthLayout.vue'),
-    children: [{ path: '', name: 'Login', component: Login }],
+    children: [
+      { path: '', name: 'Login', component: Login },
+      { path: '/password-reset-form', name: 'ResetPassword', component: ResetPassword, },
+    ],
   },
   // Catch-all route to redirect to Dashboard for any undefined paths
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/dashboard',
+    redirect: '/login',
   },
 ]
 
