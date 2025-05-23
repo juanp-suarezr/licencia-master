@@ -21,6 +21,9 @@ import "vue-awesome-paginate/dist/style.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import 'vue-multiselect/dist/vue-multiselect.min.css';
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
 
 const pinia = createPinia()
 
@@ -32,6 +35,7 @@ app.use(LoadingPlugin)
 app.use(router)
 app.use(store)
 app.directive('tooltip', Tooltip)
+app.use(Toast)
 app.use(VueAwesomePaginate)
 app.use(VueSweetalert2)
 app.use(PrimeVue, {
@@ -39,5 +43,6 @@ app.use(PrimeVue, {
   pt: Lara,
   locale: Traduccion,
 })
+
 
 app.mount('#app')

@@ -39,6 +39,9 @@ import ParametrosMetaCurricular from '../views/parametros/meta_curricular_juegos
 import Login from '../views/auth/Login.vue';
 import ResetPassword from '../views/auth/ResetPassword.vue';
 
+//ANALITICA DATOS
+import AnaliticaEstudiantes from '../views/analitica/Estudiantes.vue'
+
 const routes = [
   {
     path: '/',
@@ -101,6 +104,9 @@ const routes = [
       { path: 'roles-create', name: 'RolesCreate', title: 'Nuevo Rol', meta: 'roles', component: RolesCreate },
       { path: 'roles-edit/:id', name: 'RolesEdit', title: 'Editar Rol', meta: 'roles', component: RolesEdit },
       
+
+      //ANALITICA DATOS
+      { path: 'analitica/estudiantes', name: 'AnaliticaEstudiantes', title: 'Analítica estudiantes', meta: 'analitica', component: AnaliticaEstudiantes },
 
 
     ],

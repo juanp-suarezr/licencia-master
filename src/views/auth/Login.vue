@@ -54,6 +54,7 @@ import axios from '../../plugins/axios'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/auth'
 import { useDarkModeStore } from '@/store/darkMode'
+import { useToast } from "vue-toastification";
 
 const userStore = useUserStore()
 const darkModeStore = useDarkModeStore()
@@ -75,6 +76,8 @@ const handleLogin = async () => {
         router.push('/')
     } catch (error) {
         // Manejo de errores
+        const toast = useToast()
+        toast.error('Error al iniciar sesión. Verifica tus credenciales.')
 
         console.log(error)
     } finally {

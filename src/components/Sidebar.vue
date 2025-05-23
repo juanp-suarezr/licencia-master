@@ -29,6 +29,21 @@
           </router-link>
         </li>
       </ul>
+      <!-- ANALITICA DATOS -->
+      <h3 v-if="isAuthenticated"
+        class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
+        Analítica de datos
+      </h3>
+      <ul class="">
+        <!-- dashboard -->
+        <li>
+          <router-link to="/analitica/estudiantes" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActiveDashboard('/analitica/estudiantes') }">
+            <ChartBarSquareIcon class="h-4 w-4" /> Estudiantes
+          </router-link>
+        </li>
+        
+      </ul>
       <!-- GESTION REGISTROS -->
       <h3 v-if="isAuthenticated && user.rol != 'Estudiante'"
         class="mt-2 mb-1 ml-4 text-xs font-medium text-bodydark2 uppercase">
@@ -145,7 +160,7 @@
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/auth';
 import { storeToRefs } from 'pinia';
-import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, UserGroupIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, CreditCardIcon, RectangleGroupIcon } from '@heroicons/vue/24/solid';
+import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, UserGroupIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, CreditCardIcon, RectangleGroupIcon, ChartBarSquareIcon } from '@heroicons/vue/24/solid';
 
 // Usar el store de usuarios
 const userStore = useUserStore();
