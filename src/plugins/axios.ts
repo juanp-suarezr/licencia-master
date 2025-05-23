@@ -6,8 +6,8 @@ import { useLoading } from 'vue-loading-overlay';
 import { showLoader, hideLoader } from '../components/Loader/loader';
 
 const axiosInstance = axios.create({
-  // baseURL: 'https://api-licencias.bosingenieria.com',
-  baseURL: 'http://localhost:8000/',
+  baseURL: 'https://api-licencias.bosingenieria.com',
+  // baseURL: 'http://localhost:8000/',
 })
 
 axiosInstance.interceptors.request.use((config) => {
