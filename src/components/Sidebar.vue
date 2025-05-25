@@ -35,11 +35,25 @@
         Analítica de datos
       </h3>
       <ul class="">
-        <!-- dashboard -->
+        <!-- analitica estudiantes -->
         <li>
           <router-link to="/analitica/estudiantes" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActiveDashboard('/analitica/estudiantes') }">
             <ChartBarSquareIcon class="h-4 w-4" /> Estudiantes
+          </router-link>
+        </li>
+        <!-- analitica juegos -->
+        <li>
+          <router-link to="/analitica/juegos" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActiveDashboard('/analitica/juegos') }">
+            <ChartPieIcon class="h-4 w-4" /> Juegos
+          </router-link>
+        </li>
+        <!-- analitica Desempeño -->
+        <li>
+          <router-link to="/analitica/desempeno" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
+            :class="{ '!bg-slate-600': isActiveDashboard('/analitica/desempeno') }">
+            <PresentationChartLineIcon class="h-4 w-4" /> Desempeño
           </router-link>
         </li>
         
@@ -160,7 +174,7 @@
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/auth';
 import { storeToRefs } from 'pinia';
-import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, UserGroupIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, CreditCardIcon, RectangleGroupIcon, ChartBarSquareIcon } from '@heroicons/vue/24/solid';
+import { HomeModernIcon, UsersIcon, BuildingLibraryIcon, BriefcaseIcon, AcademicCapIcon, UserGroupIcon, CubeTransparentIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, CreditCardIcon, RectangleGroupIcon, ChartBarSquareIcon, ChartPieIcon, PresentationChartLineIcon } from '@heroicons/vue/24/solid';
 
 // Usar el store de usuarios
 const userStore = useUserStore();

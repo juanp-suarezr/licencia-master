@@ -26,7 +26,7 @@ export default {
       'animate-dash-frame',
 
       // Color
-      'stroke-gray dark:stroke-slate-900',
+      'stroke-green-400 dark:stroke-green-800',
 
       // Fill
       'fill-none',

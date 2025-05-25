@@ -41,6 +41,8 @@ import ResetPassword from '../views/auth/ResetPassword.vue';
 
 //ANALITICA DATOS
 import AnaliticaEstudiantes from '../views/analitica/Estudiantes.vue'
+import AnaliticaJuegos from '../views/analitica/Juegos.vue'
+import AnaliticaDesempeño from '../views/analitica/Desempeño.vue'
 
 const routes = [
   {
@@ -107,7 +109,8 @@ const routes = [
 
       //ANALITICA DATOS
       { path: 'analitica/estudiantes', name: 'AnaliticaEstudiantes', title: 'Analítica estudiantes', meta: 'analitica', component: AnaliticaEstudiantes },
-
+      { path: 'analitica/juegos', name: 'AnaliticaJuegos', title: 'Analítica juegos', meta: 'analitica', component: AnaliticaJuegos },
+      { path: 'analitica/desempeno', name: 'AnaliticaDesempeno', title: 'Analítica Desempeño', meta: 'analitica', component: AnaliticaDesempeño },
 
     ],
     meta: { requiresAuth: true },
