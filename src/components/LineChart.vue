@@ -54,6 +54,12 @@ const chartOptions = computed(() => ({
       color: darkModeStore.darkMode ? '#e5e7eb' : '#1e293b',
       font: { size: 20 },
     },
+    datalabels: {
+      color: '#fff',
+      font: { weight: 'bold', size: 12 },
+      formatter: (value: number) => value,
+      display: false,
+    },
   },
   scales: {
     x: {

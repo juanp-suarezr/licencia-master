@@ -7,8 +7,9 @@
 import { computed } from 'vue'
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement)
+ChartJS.register(Title, Tooltip, Legend, ArcElement, ChartDataLabels)
 
 const props = defineProps<{
   labels?: string[]
@@ -18,16 +19,16 @@ const props = defineProps<{
 
 // Paleta de colores semi dark
 const palette = [
-  '#2563eb', // azul
-  '#16a34a', // verde
-  '#ea580c', // naranja
-  '#dc2626', // rojo
-  '#6b7280', // gris
-  '#111827', // gris oscuro
-  '#7c3aed', // purpura
-  '#f59e42', // naranja claro
-  '#64748b', // slate
-  '#a21caf', // violeta oscuro
+  '#3C50E0', // azul base
+  '#16A34A', // verde medio
+  '#7C3AED', // púrpura medio
+  '#1E40AF', // azul oscuro
+  '#065F46', // verde oscuro
+  '#C4B5FD', // púrpura claro
+  '#BBF7D0', // verde claro
+  '#93C5FD', // azul
+  '#10B981', // verde esmeralda
+  '#4C1D95', // púrpura oscuro
 ]
 
 // Genera un array de colores de la paleta, repitiendo si es necesario
@@ -58,6 +59,11 @@ const chartOptions = {
   plugins: {
     legend: { position: 'bottom' },
     title: props.title ? { display: true, text: props.title } : { display: false },
+    datalabels: {
+      color: '#fff',
+      font: { weight: 'bold', size: 12 },
+      formatter: (value: number) => value,
+    },
   },
 }
 </script>

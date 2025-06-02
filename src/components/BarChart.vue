@@ -16,26 +16,30 @@ import {
 } from 'chart.js'
 import { computed } from 'vue'
 import { useDarkModeStore } from '@/store/darkMode'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ChartDataLabels)
 
 const props = defineProps<{
   labels: string[]
   values: number[]
-  title?: string
+  title?: string,
+  color?: string[] // prop opcional para colores personalizados
+  horizontal?: boolean
 }>()
 
 const darkModeStore = useDarkModeStore()
 
 const palette = [
-  '#2563eb', // azul
-  '#16a34a', // verde
-  '#ea580c', // naranja
-  '#dc2626', // rojo
-  '#6b7280', // gris
-  '#111827', // gris oscuro
-  '#7c3aed', // purpura
-]
+  '#3C50E0', // azul base
+  '#1E40AF', // azul oscuro
+  '#1E80AE', // azul medio-oscuro
+  '#7C3AED', // púrpura medio
+  '#4C1D95', // púrpura oscuro
+  '#16A34A', // verde medio
+  '#065F46', // verde oscuro
+  '#10B981', // verde esmeralda
+];
 
 function getRandomColors(length: number) {
   const colors = []
@@ -57,7 +61,9 @@ const chartData = computed(() => ({
   datasets: [
     {
       label: props.title || 'Datos',
-      backgroundColor: getRandomColors(props.values.length),
+      backgroundColor: props.color && props.color.length
+        ? props.color
+        : getRandomColors(props.values.length),
       data: props.values,
     },
   ],
@@ -65,6 +71,7 @@ const chartData = computed(() => ({
 
 const chartOptions = computed(() => ({
   responsive: true,
+  indexAxis: props.horizontal ? 'y' : 'x', // <-- Orientación dinámica
   plugins: {
     legend: { display: false },
     title: {
@@ -75,6 +82,12 @@ const chartOptions = computed(() => ({
         size: 18,
       },
     },
+    datalabels: {
+      color: '#fff',
+      font: { weight: 'normal', size: 12 },
+      formatter: (value: number) => value,
+    },
+    
   },
 }))
 </script>

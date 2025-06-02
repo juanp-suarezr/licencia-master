@@ -5,13 +5,13 @@ export default {
       { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled },
     ],
   }),
-  range: {
+  range: ({ props }) => ({
     class: [
       // Stroke
       'stroke-current',
 
       // Color
-      'stroke-blue-200 dark:stroke-boxdark',
+      props.rangeColor ? props.rangeColor : 'stroke-blue-200 dark:stroke-boxdark',
 
       // Fill
       'fill-none',
@@ -19,19 +19,19 @@ export default {
       // Transition
       'transition duration-100 ease-in',
     ],
-  },
-  value: {
+  }),
+  value: ({ props }) => ({
     class: [
       // Animation
       'animate-dash-frame',
 
       // Color
-      'stroke-green-400 dark:stroke-green-800',
+      props.valueColor ? props.valueColor : 'stroke-green-400 dark:stroke-green-800',
 
       // Fill
       'fill-none',
     ],
-  },
+  }),
   label: {
     class: [
       // Text Style

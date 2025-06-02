@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
   <div class="w-full flex justify-start">
     <breadcrumb-default
@@ -70,7 +71,7 @@
     >
       <div class="text-xl font-bold">Ranking de juegos</div>
       <p class="text-sm">
-        {{ parametro.totalJuegosConceptoMayor70 }} conconcepto mayor o igual a 70
+        {{ parametro.totalJuegosConceptoMayor70 }} juegos con desempeño mayor o igual a 70
       </p>
       <div
         class="space-y-2 overflow-x-auto w-full mt-2"
@@ -82,7 +83,7 @@
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">#</th>
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">Juego</th>
               <th class="py-2 px-4 font-medium text-black dark:text-white text-right">
-                Jugados y aprobados
+                Entrenamientos completados
               </th>
             </tr>
           </thead>
@@ -95,12 +96,12 @@
               <td class="py-3 px-3 whitespace-nowrap text-left align-top">
                 <p class="font-bold text-lg text-blue-600">{{ idx + 1 }}</p>
               </td>
-              <td class="py-3 px-3 whitespace-nowrap text-left align-top">
-                <p class="font-semibold">{{ item.codigo }}</p>
+              <td class="py-3 px-3 break-words text-left align-top">
+                <p class="font-semibold">{{ getJuego(item.codigo) }}</p>
               </td>
               <td class="py-3 px-3 whitespace-nowrap text-right align-top">
                 <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Jugados y aprobados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
+                  Entrenamientos <br> completados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
                 </p>
                 <!-- Barra de progreso dentro del mismo td -->
                 <div class="w-full flex items-center gap-2 mt-2" v-if="parametro.totalJuegosConceptoMayor70">
@@ -145,7 +146,7 @@
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">#</th>
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">Juego</th>
               <th class="py-2 px-4 font-medium text-black dark:text-white text-right">
-                Jugados y aprobados
+                Entrenamientos completados
               </th>
             </tr>
           </thead>
@@ -164,7 +165,7 @@
               </td>
               <td class="py-3 px-3 whitespace-nowrap text-right align-top">
                 <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Jugados y aprobados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
+                  Entrenamientos <br> completados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
                 </p>
                 <!-- Barra de progreso dentro del mismo td -->
                 <div class="w-full flex items-center gap-2 mt-2" v-if="parametro.totalJuegosConceptoMayor70">
@@ -213,11 +214,19 @@ const isAdmin = computed(() => userStore.user.rol === 'Administrador')
 const clientes = ref([])
 const clienteSeleccionado = ref<number | null>(0)
 
+const juegos = ref([])
+
+
 const parametro = ref<any>({})
 
 const fetchClientes = async () => {
   const response = await axios.get('/api/analitica/listado-clientes')
   clientes.value = response.data
+}
+
+const fetchJuegos = async () => {
+  const response = await axios.get('/api/analitica/listado-juegos')
+  juegos.value = response.data
 }
 
 const fetchAnalitica = async () => {
@@ -229,6 +238,16 @@ const fetchAnalitica = async () => {
   parametro.value = response.data
 }
 
+const getJuego = (codigo: string) => {
+  console.log('Buscando juego con código:', codigo);
+  
+  const ultimoSegmento = codigo.split('-').pop(); // Extrae el último segmento después de los guiones
+  
+  const juego = juegos.value.find((j: any) => j.codigo === ultimoSegmento);
+
+  return juego ? juego.nombre : 'Desconocido';
+}
+
 const onClienteChange = () => {
   fetchAnalitica()
 }
@@ -237,6 +256,7 @@ onMounted(async () => {
   if (isAdmin.value) {
     await fetchClientes()
   }
+  await fetchJuegos()
   await fetchAnalitica()
 })
 </script>
