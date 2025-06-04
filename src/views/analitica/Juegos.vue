@@ -82,7 +82,7 @@
     <div
       class="mb-4 W-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">Niveles intentados</div>
+      <div class="text-xl font-bold">Entrenamientos intentados x nivel</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 20</div>
       <select
         v-model="nivelSeleccionado"
@@ -107,7 +107,7 @@
     <div
       class="mb-4 W-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">Niveles completados</div>
+      <div class="text-xl font-bold">Entrenamientos completados x nivel</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 70</div>
       <select
         v-model="nivelSeleccionado1"

@@ -82,7 +82,7 @@
     >
       <div class="text-xl font-bold mb-2">Desempeño promedio en habilidades cognitivas</div>
 
-      Total de juegos con desempeño superior a 70% en habilidades cognitivas
+      Total de juegos con desempeño igual o superior a 20% en habilidades cognitivas
       <span class="font-bold">{{ parametro.totalJuegosHabilidad }}</span>
     </div>
     <!-- Columna 1 tabla  -->
