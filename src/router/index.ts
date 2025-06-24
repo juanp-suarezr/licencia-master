@@ -4,12 +4,15 @@ import Usuarios from '../views/usuarios/usuarios.vue'
 import Clientes from '../views/usuarios/clientes/index.vue'
 import ClientesCreate from '../views/usuarios/clientes/add.vue'
 import ClientesEdit from '../views/usuarios/clientes/edit.vue'
+import ClientesMasivo from '../views/usuarios/clientes/masivo.vue'
 import Docentes from '../views/usuarios/docentes/index.vue'
 import DocentesCreate from '../views/usuarios/docentes/add.vue'
 import DocentesEdit from '../views/usuarios/docentes/edit.vue'
+import DocentesMasivo from '../views/usuarios/docentes/masivo.vue'
 import Estudiantes from '../views/usuarios/estudiantes/index.vue'
 import EstudiantesCreate from '../views/usuarios/estudiantes/add.vue'
 import EstudiantesEdit from '../views/usuarios/estudiantes/edit.vue'
+import EstudiantesMasivo from '../views/usuarios/estudiantes/masivo.vue'
 import Grupos from '../views/usuarios/grupos/index.vue'
 import GruposCreate from '../views/usuarios/grupos/add.vue'
 import GruposEdit from '../views/usuarios/grupos/edit.vue'
@@ -57,14 +60,17 @@ const routes = [
       { path: 'clientes', name: 'Clientes', title: 'Clientes', meta: 'clientes', component: Clientes },
       { path: 'clientes-create', name: 'ClientesCreate', title: 'Nuevo Cliente', meta: 'clientes', component: ClientesCreate },
       { path: 'clientes-edit/:id', name: 'ClientesEdit', title: 'Editar Cliente', meta: 'clientes', component: ClientesEdit },
+      { path: 'clientes-masivo', name: 'ClientesMasivo', title: 'Importar Clientes', meta: 'clientes', component: ClientesMasivo },
       //docentes
       { path: 'docentes', name: 'Docentes', title: 'Docentes', meta: 'docentes', component: Docentes },
       { path: 'docentes-create', name: 'DocentesCreate', title: 'Nuevo Docente', meta: 'docentes', component: DocentesCreate },
       { path: 'docentes-edit/:id', name: 'DocentesEdit', title: 'Editar Docente', meta: 'docentes', component: DocentesEdit },
+      { path: 'docentes-masivo', name: 'DocentesMasivo', title: 'Importar Docentes', meta: 'docentes', component: DocentesMasivo },
       //estudiantes
       { path: 'estudiantes', name: 'estudiantes', title: 'Estudiantes', meta: 'estudiantes', component: Estudiantes },
       { path: 'estudiantes-create', name: 'EstudiantesCreate', title: 'Nuevo Estudiante', meta: 'estudiantes', component: EstudiantesCreate },
       { path: 'estudiantes-edit/:id', name: 'EstudiantesEdit', title: 'Editar Estudiante', meta: 'estudiantes', component: EstudiantesEdit },
+      { path: 'estudiantes-masivo', name: 'EstudiantesMasivo', title: 'Importar Estudiantes', meta: 'estudiantes', component: EstudiantesMasivo },
       //Grupos
       { path: 'grupos', name: 'Grupos', title: 'Grupos', meta: 'grupos', component: Grupos },
       { path: 'grupos-create', name: 'GruposCreate', title: 'Nuevo Grupo', meta: 'grupos', component: GruposCreate },

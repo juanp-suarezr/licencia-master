@@ -1,4 +1,4 @@
-# Etapa 1: Construcción del proyecto
+
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -24,7 +24,7 @@ COPY --from=builder /app/dist/ /usr/local/apache2/htdocs/
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
 
 # Copiar configuración personalizada
-COPY ./docker/apache/vue.conf /usr/local/apache2/conf/httpd.conf
+#COPY ./docker/apache/vue.conf /usr/local/apache2/conf/httpd.conf
 
 EXPOSE 80
 

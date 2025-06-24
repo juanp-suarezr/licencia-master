@@ -45,12 +45,20 @@
   <div class="w-full mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
     <div class="flex flex-wrap justify-between items-center">
       <h2 class="mt-2 px-4 text-base">Estudiantes</h2>
-      <a
-        href="/estudiantes-create"
-        class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md"
-      >
-        Nuevo estudiante
-      </a>
+      <div class="w-auto gap-4">
+        <a
+          href="/estudiantes-create"
+          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md mr-2"
+        >
+          Nuevo estudiante
+        </a>
+        <a
+          href="/estudiantes-masivo"
+          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md"
+        >
+          Importar estudiantes
+        </a>
+      </div>
     </div>
     <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
       <div class="flex flex-wrap gap-2 mb-2">
@@ -203,41 +211,43 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, inject } from 'vue';
-import { AcademicCapIcon, ArchiveBoxIcon, PencilSquareIcon, DocumentCheckIcon } from '@heroicons/vue/24/solid';
-import axios from '../../../plugins/axios';
+import { ref, onMounted, inject } from 'vue'
+import {
+  AcademicCapIcon,
+  ArchiveBoxIcon,
+  PencilSquareIcon,
+  DocumentCheckIcon,
+} from '@heroicons/vue/24/solid'
+import axios from '../../../plugins/axios'
 import { useUserStore } from '@/store/auth'
-import { storeToRefs } from 'pinia';
-import Modal from '@/components/Modal.vue';
-import Swal from 'sweetalert2';
-import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
+import { storeToRefs } from 'pinia'
+import Modal from '@/components/Modal.vue'
+import Swal from 'sweetalert2'
+import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 
-const swal = inject('$swal') as typeof Swal;
+const swal = inject('$swal') as typeof Swal
 
 const userStore = useUserStore()
-const { user } = storeToRefs(userStore);
-
-
+const { user } = storeToRefs(userStore)
 
 // Simulación de datos
 
-const totalEstudiantes = ref(0);
+const totalEstudiantes = ref(0)
 //info clientes
-const infoClientes = ref([]);
+const infoClientes = ref([])
 // Modal
-const ModalEliminar = ref(false);
+const ModalEliminar = ref(false)
 //id a eliminar
-const idEliminar = ref(0);
+const idEliminar = ref(0)
 
 //pagiandor y search
-const usuarios = ref([]);
-const search = ref('');
-const cliente = ref(null);
-const perPage = ref(5);
-const page = ref(1);
-const totalPages = ref(1);
-const currentPage = ref(1);
-
+const usuarios = ref([])
+const search = ref('')
+const cliente = ref(null)
+const perPage = ref(5)
+const page = ref(1)
+const totalPages = ref(1)
+const currentPage = ref(1)
 
 const getTotales = async () => {
   try {
@@ -247,16 +257,14 @@ const getTotales = async () => {
         accept: 'application/json',
         'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
       },
-    });
-    console.log('Totales obtenidos:', response.data);
-    
-    infoClientes.value = response.data.instituciones;
+    })
+    console.log('Totales obtenidos:', response.data)
 
-
+    infoClientes.value = response.data.instituciones
   } catch (error) {
-    console.error('Error al obtener totales:', error);
+    console.error('Error al obtener totales:', error)
   }
-};
+}
 
 const fetchUsuarios = async () => {
   const response = await axios.get('/api/estudiantes', {
@@ -266,36 +274,36 @@ const fetchUsuarios = async () => {
       per_page: perPage.value,
       page: page.value,
     },
-  });
-  console.log('Usuarios obtenidos:', response.data.data);
-  console.log('Total de páginas:', response.data.data.last_page);
+  })
+  console.log('Usuarios obtenidos:', response.data.data)
+  console.log('Total de páginas:', response.data.data.last_page)
 
-  usuarios.value = response.data.data.data;
-  totalPages.value = response.data.data.last_page;
-  totalEstudiantes.value = response.data.data.total;
-};
+  usuarios.value = response.data.data.data
+  totalPages.value = response.data.data.last_page
+  totalEstudiantes.value = response.data.data.total
+}
 
 const changePage = (newPage: number) => {
-  page.value = newPage;
-  fetchUsuarios();
-};
+  page.value = newPage
+  fetchUsuarios()
+}
 
 const limpiar = () => {
-  page.value = 0;
-  search.value = '';
-  fetchUsuarios();
-};
+  page.value = 0
+  search.value = ''
+  fetchUsuarios()
+}
 
 const actuBycliente = () => {
-  page.value = 0;
-  fetchUsuarios();
-};  
+  page.value = 0
+  fetchUsuarios()
+}
 
 const eliminarDocente = (id: number) => {
-  console.log('Eliminar cliente:', id);
-  idEliminar.value = id;
-  ModalEliminar.value = true;
-};
+  console.log('Eliminar cliente:', id)
+  idEliminar.value = id
+  ModalEliminar.value = true
+}
 
 //generar reporte PDF
 const GenerarReporte = async (id: number) => {
@@ -306,19 +314,19 @@ const GenerarReporte = async (id: number) => {
         'Content-Type': 'application/json',
         accept: 'application/pdf',
       },
-    });
+    })
 
     // Crear un enlace temporal para descargar el PDF
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `reporte_estudiante_${id}.pdf`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `reporte_estudiante_${id}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
   } catch (error) {
-    console.error('Error al generar el reporte:', error);
+    console.error('Error al generar el reporte:', error)
     swal.fire({
       icon: 'error',
       title: 'Error al generar el reporte',
@@ -326,9 +334,10 @@ const GenerarReporte = async (id: number) => {
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
-        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
       },
-    });
+    })
   }
 }
 const submitEliminar = async () => {
@@ -339,7 +348,7 @@ const submitEliminar = async () => {
         accept: 'application/json',
         'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
       },
-    });
+    })
     swal.fire({
       icon: 'success',
       title: 'Cliente eliminado con éxito',
@@ -349,18 +358,17 @@ const submitEliminar = async () => {
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
-        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
       },
       didClose: () => {
-        ModalEliminar.value = false;
-        idEliminar.value = 0;
-        window.location.reload();
-      }
-
-    }); 
-
+        ModalEliminar.value = false
+        idEliminar.value = 0
+        window.location.reload()
+      },
+    })
   } catch (error) {
-    console.error('Error al eliminar cliente:', error);
+    console.error('Error al eliminar cliente:', error)
     swal.fire({
       icon: 'error',
       title: 'Error al eliminar cliente',
@@ -369,29 +377,26 @@ const submitEliminar = async () => {
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
-        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
       },
       didClose: () => {
-        ModalEliminar.value = false;
-        idEliminar.value = 0;
-        
-      }
-
-    });
+        ModalEliminar.value = false
+        idEliminar.value = 0
+      },
+    })
   }
-};
+}
 
 const closeModal = () => {
-  ModalEliminar.value = false;
-  idEliminar.value = 0;
-};
+  ModalEliminar.value = false
+  idEliminar.value = 0
+}
 
 onMounted(() => {
-  getTotales();
-  fetchUsuarios();
-});
-
-
+  getTotales()
+  fetchUsuarios()
+})
 </script>
 
 <style></style>
