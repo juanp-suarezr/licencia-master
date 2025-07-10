@@ -99,6 +99,7 @@
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
               ROL
             </th>
+            
 
           </tr>
         </thead>
@@ -124,6 +125,7 @@
                 {{ item.rol }}
               </h5>
             </td>
+            
           </tr>
         </tbody>
       </table>

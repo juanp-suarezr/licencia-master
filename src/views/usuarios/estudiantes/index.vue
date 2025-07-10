@@ -211,7 +211,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, onBeforeUnmount } from 'vue'
 import {
   AcademicCapIcon,
   ArchiveBoxIcon,
@@ -226,6 +226,10 @@ import Swal from 'sweetalert2'
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
 
 const swal = inject('$swal') as typeof Swal
+
+//polling y notificaciones
+const notificacion = ref<string | null>(null)
+let polling: ReturnType<typeof setInterval> | null = null
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -393,9 +397,58 @@ const closeModal = () => {
   idEliminar.value = 0
 }
 
+//check carga masiva
+const checkCargaMasiva = async () => {
+  try {
+    const res = await axios.get('/api/notificacion-carga-estudiantes')
+    if (res.data.completado) {
+      notificacion.value = res.data.mensaje
+      if (polling) clearInterval(polling)
+      localStorage.removeItem('cargaMasivaEnviada2') // Limpiar el estado de carga masiva
+      swal.fire({
+        icon: 'success',
+        title: 'Carga masiva completada',
+        html: `<p>${notificacion.value}</p>`,
+        customClass: {
+          popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+          title: 'dark:text-gray text-graydark',
+          confirmButton:
+            'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+        },
+      })
+    }
+  } catch (e) {
+    localStorage.removeItem('cargaMasivaEnviada2') // Limpiar el estado de carga masiva
+    // Manejo de error opcional
+    swal.fire({
+      icon: 'error',
+      title: 'Error al verificar carga masiva',
+      text: 'Ocurrió un error al verificar el estado de la carga masiva.',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  }
+}
+
+const iniciarPolling = () => {
+  // Solo inicia el polling si se ha enviado el archivo (ajusta la condición)
+  if (localStorage.getItem('cargaMasivaEnviada2') === 'true') {
+    polling = setInterval(checkCargaMasiva, 15000)
+  }
+}
+
 onMounted(() => {
   getTotales()
   fetchUsuarios()
+  iniciarPolling()
+})
+
+onBeforeUnmount(() => {
+  if (polling) clearInterval(polling)
 })
 </script>
 

@@ -125,6 +125,7 @@ const cargarArchivo = async () => {
     const response = await axios.post('/api/cargue-docentes', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
+    localStorage.setItem('cargaMasivaEnviada1', 'true');
     console.log(response)
     // Notifica éxito
     swal.fire({
