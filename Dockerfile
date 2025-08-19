@@ -18,7 +18,7 @@ FROM httpd:2.4-alpine
 RUN mkdir -p /usr/local/apache2/htdocs
 
 # Copiar archivos estáticos desde la etapa de build
-COPY --from=builder /app/dist/ /usr/local/apache2/htdocs/
+COPY --from=builder /app/public/ /usr/local/apache2/htdocs/
 
 # Habilitar módulo de reescritura
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf

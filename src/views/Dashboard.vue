@@ -7,7 +7,7 @@
           v-if="isAuthenticated && user.rol == 'Administrador'"
           class="md:grid gap-6 md:grid-cols-2"
         >
-          <div class="p-6 bg-white dark:bg-graydark rounded-lg shadow-md mb-4">
+          <div class="sm:p-6 p-4 bg-white dark:bg-graydark rounded-lg shadow-md mb-4">
             <!-- Carrusel -->
             <div class="relative overflow-hidden">
               <div
@@ -15,12 +15,12 @@
                 :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
               >
                 <!-- info 1 -->
-                <div class="w-full px-10 flex-shrink-0">
+                <div class="w-full sm:px-10 px-4 flex-shrink-0">
                   <h2 class="text-xl font-bold">Cantidad de registros</h2>
                   <p class="mt-2">Unidades</p>
 
-                  <div class="w-full grid grid-cols-4 items-center">
-                    <div class="col-span-2 w-auto">
+                  <div class="w-full sm:grid grid-cols-4 items-center">
+                    <div class="col-span-2 w-auto mb-4 sm:mb-0">
                       <p v-if="totalesInfo" class="text-lg text-gray-500">
                         Total licencias:
                         <b>{{
@@ -59,12 +59,12 @@
                 </div>
 
                 <!-- info 2 -->
-                <div class="w-full px-10 flex-shrink-0">
+                <div class="w-full sm:px-10 px-4 flex-shrink-0">
                   <h2 class="text-xl font-bold">Cantidad de registros</h2>
                   <p class="mt-2">Unidades</p>
 
-                  <div class="w-full grid grid-cols-4 items-center">
-                    <div class="col-span-2 w-auto">
+                  <div class="w-full sm:grid grid-cols-4 items-center">
+                    <div class="col-span-2 w-auto mb-4 sm:mb-0">
                       <p v-if="totalesInfo" class="text-lg text-gray-500">
                         Total Usuarios:
                         <b>{{

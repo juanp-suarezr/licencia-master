@@ -77,6 +77,7 @@ const cargarArchivo = async () => {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     console.log(response)
+    localStorage.setItem('cargaMasivaEnviada', 'true');
     // Notifica éxito
     swal.fire({
       icon: 'success',

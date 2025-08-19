@@ -84,9 +84,9 @@ const getTiposLicencias = async () => {
         accept: 'application/json',
       },
     });
-    console.log('Tipos de licencias obtenidos:', response.data);
+    console.log('Tipos de licencias obtenidos:', response.data.data.data);
 
-    tiposLicencias.value = response.data.data;
+    tiposLicencias.value = response.data.data.data;
   } catch (error) {
     console.error('Error al obtener tipos de licencias:', error);
   }

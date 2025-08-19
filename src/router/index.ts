@@ -40,6 +40,7 @@ import ParametrosNivelJuegos from '../views/parametros/nivel_juegos/Index.vue'
 import ParametrosHabilidadesCognitivas from '../views/parametros/habilidades_cognitivas_juegos/Index.vue'
 import ParametrosMetaCurricular from '../views/parametros/meta_curricular_juegos/Index.vue'
 import ParametrosObjetoTienda from '../views/parametros/objetos_tienda/Index.vue'
+import ParametrosInfoApk from '../views/parametros/info_apk/Index.vue'
 import Login from '../views/auth/Login.vue';
 import ResetPassword from '../views/auth/ResetPassword.vue';
 
@@ -110,6 +111,8 @@ const routes = [
       { path: 'parametros-meta-curricular', name: 'ParametrosMetaCurricular', title: 'Parámetros Meta Curricular', meta: 'parametros', component: ParametrosMetaCurricular },
       //objetos tienda
       {path: 'parametros-objetos-tienda', name: 'ParametrosObjetosTienda', title: 'Parámetros Objetos Tienda', meta: 'parametros', component: ParametrosObjetoTienda },
+      //info apk
+      {path: 'parametros-info-apk', name: 'ParametrosInfoApk', title: 'Información APK', meta: 'parametros', component: ParametrosInfoApk },
       //Roles
       { path: 'roles', name: 'roles', title: 'Roles', meta: 'roles', component: Roles },
       { path: 'roles-create', name: 'RolesCreate', title: 'Nuevo Rol', meta: 'roles', component: RolesCreate },
