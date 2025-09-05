@@ -26,6 +26,7 @@ const props = defineProps<{
   title?: string,
   color?: string[] // prop opcional para colores personalizados
   horizontal?: boolean
+  percentage?: boolean
 }>()
 
 const darkModeStore = useDarkModeStore()
@@ -85,7 +86,7 @@ const chartOptions = computed(() => ({
     datalabels: {
       color: '#fff',
       font: { weight: 'normal', size: 12 },
-      formatter: (value: number) => value,
+      formatter: (value: number) => `${value}${props.percentage ? '%' : ''}`,
     },
     
   },

@@ -68,9 +68,31 @@
       </div>
       <div class="mb-4">
         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input v-model="cliente.password" type="password" id="password"
-          class="mt-1 p-2 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
-          required />
+         <div class="relative">
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            v-model="cliente.password"
+            class="mt-1 p-2 pr-10 w-full border border-graydark dark:border-strokedark rounded-md shadow-sm dark:bg-slate-900 dark:text-gray"
+            required
+          />
+
+          <!-- botón/ícono dentro del input -->
+          <button
+            type="button"
+            @click="showPassword = !showPassword"
+            :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1 text-gray-500 hover:text-gray-700 dark:text-gray"
+            tabindex="-1"
+          >
+            <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2 5.27 3.28 4l17.45 17.45-1.27 1.27-2.3-2.3A12.9 12.9 0 0 1 12 19c-7 0-10-7-10-7a22.28 22.28 0 0 1 5.12-6.43L2 5.27zm7.73 7.73a3 3 0 0 0 4.2 4.2l-4.2-4.2zM12 7a5 5 0 0 1 5 5c0 .58-.1 1.14-.28 1.66l-1.57-1.57A3 3 0 0 0 10.9 9.9L8.34 7.34C9.15 7.12 10.05 7 12 7z"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="flex justify-between">
         <button type="button" @click="regresar" class="px-4 py-2 bg-graydark text-white rounded-md shadow-sm">
@@ -107,6 +129,8 @@ const cliente = ref({
   logo: null,
 
 });
+
+const showPassword = ref(false);
 
 const onFileChange = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];
