@@ -24,19 +24,19 @@
     <div
       class="mb-2 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Entrenamientos completados</div>
+      <div class="text-xl font-bold mb-2">“Niveles de juegos superados en %</div>
       <div class="w-full px-4 flex flex-wrap justify-center gap-4">
         <!-- Libre -->
         <div class="flex items-center justify-center gap-2">
           <!-- cuadro color libre -->
-          <div class="w-full rounded-md shadow-xl bg-primary p-2 text-white">
+          <div class="w-full rounded-md shadow-xl bg-[#7C3AED] p-2 text-white">
             <p>Libre</p>
           </div>
         </div>
         <!-- Misión -->
         <div class="flex items-center justify-center gap-2">
           <!-- cuadro color misión -->
-          <div class="w-full rounded-md shadow-xl bg-success p-2 text-white">
+          <div class="w-full rounded-md shadow-xl bg-warning p-2 text-white">
             <p>Misión</p>
           </div>
         </div>
@@ -46,11 +46,19 @@
     <div
       class="mb-4 w-full sm:col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Modo libre</div>
+      <div class="text-xl font-bold mb-2">Modo libre (%)</div>
 
-      <Knob readonly v-model="juegosLibres" :size="120" :showValue="true" class="my-4" />
-      <div class="text-sm text-gray-700 dark:text-gray-300 mt-2" valueColor="#3C50E0">
-        Desempeño &ge; 70: <b>{{ parametro.totalJuegosLibresConceptoMayor70 ?? 0 }}</b> de
+      <Knob
+        readonly
+        v-model="juegosLibres"
+        :size="120"
+        :showValue="true"
+        class="my-4"
+        valueColor="#7C3AED"
+      />
+      <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">
+        En niveles superados por encima del 70%
+        <b>{{ parametro.totalJuegosLibresConceptoMayor70 ?? 0 }}</b> de
         <b>{{ parametro.totalJuegosLibres ?? 0 }}</b>
       </div>
     </div>
@@ -58,17 +66,18 @@
     <div
       class="mb-4 w-full sm:col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Modo misión</div>
+      <div class="text-xl font-bold mb-2">Modo misión (%)</div>
       <Knob
         v-model="juegosHistoricos"
         :size="120"
         :showValue="true"
         readonly
         class="my-4"
-        valueColor="#219653"
+        valueColor="#FFA70B"
       />
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">
-        Desempeño &ge; 70: <b>{{ parametro.totalJuegosHistoricosConceptoMayor70 ?? 0 }}</b> de
+        En niveles superados por encima del 70%
+        <b>{{ parametro.totalJuegosHistoricosConceptoMayor70 ?? 0 }}</b> de
         <b>{{ parametro.totalJuegosHistoricos ?? 0 }}</b>
       </div>
     </div>
@@ -82,7 +91,7 @@
     <div
       class="mb-4 W-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">Entrenamientos intentados x nivel</div>
+      <div class="text-xl font-bold">Niveles intentados</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 20</div>
       <select
         v-model="nivelSeleccionado"
@@ -100,14 +109,14 @@
         :values="nivelesIntentados"
         :title="tituloBarChart"
       />
-      Total intentados:
+      Total:
       <b>{{ totalIntentados }}</b>
     </div>
     <!-- Columna 4 niveles completaods -->
     <div
       class="mb-4 W-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">Entrenamientos completados x nivel</div>
+      <div class="text-xl font-bold">Niveles superados</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 70</div>
       <select
         v-model="nivelSeleccionado1"
@@ -125,14 +134,14 @@
         :values="nivelesCompletados"
         :title="tituloBarChart1"
       />
-      Total completados:
+      Total:
       <b>{{ totalCompletados }}</b>
     </div>
     <!-- Columna 5 Tiempo promedio por nivel de juego -->
     <div
       class="w-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">Tiempo promedio de juego exitoso por niveles</div>
+      <div class="text-xl font-bold">Tiempo de juego</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 70</div>
       <select
         v-model="nivelSeleccionado2"
@@ -149,16 +158,17 @@
         :labels="['Básico', 'Intermedio', 'Avanzado', 'Master']"
         :values="nivelesTiempo"
         :title="tituloLineChart"
+        titleY="Minutos"
       />
     </div>
     <!-- Columna 6 Tiempo promedio por area y nivel de juego -->
     <div
       class="W-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold">
-        Tiempo promedio de juego exitoso por niveles y área de conocimiento
+      <div class="text-xl font-bold">Tiempo promedio de juego</div>
+      <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">
+        “en niveles superados por encima del 70%
       </div>
-      <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Desempeño &ge; 70</div>
       <select
         v-model="AreaSeleccionado"
         @change="changeLevel3"
@@ -175,13 +185,14 @@
         :labels="['Básico', 'Intermedio', 'Avanzado', 'Master']"
         :values="nivelesTiempo1"
         :title="tituloLineChart1"
+        titleY="Minutos"
       />
     </div>
     <!-- Columna 7 Tiempo promedio por nivel de juego en tabla -->
     <div
       class="mb-4 w-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Leyenda: Tiempo promedio por nivel</div>
+      <div class="text-xl font-bold mb-2">Tiempo promedio por nivel</div>
       <table class="table-auto w-full text-sm">
         <thead>
           <tr>
@@ -203,7 +214,7 @@
     <div
       class="mb-4 w-full col-span-2 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Leyenda: Tiempo promedio por niveles y área</div>
+      <div class="text-xl font-bold mb-2">Tiempo promedio por niveles y área</div>
       <table class="table-auto w-full text-sm">
         <thead>
           <tr>
@@ -281,20 +292,18 @@ const fetchAnalitica = async () => {
   parametro.value = response.data
   console.log('parametro', response.data.libresPorNivel20)
 
-  juegosLibres.value =
-    parseFloat(
-      (
-        (response.data.totalJuegosLibresConceptoMayor70 / response.data.totalJuegosLibres) *
-        100
-      ).toFixed(1)
-    ) || 0
-  juegosHistoricos.value =
-    parseFloat(
-      (
-        (response.data.totalJuegosHistoricosConceptoMayor70 / response.data.totalJuegosHistoricos) *
-        100
-      ).toFixed(1)
-    ) || 0
+  juegosLibres.value = parseFloat(
+    (
+      (response.data.totalJuegosLibresConceptoMayor70 / response.data.totalJuegosLibres) *
+      100
+    ).toFixed(1)
+  )
+  juegosHistoricos.value = parseFloat(
+    (
+      (response.data.totalJuegosHistoricosConceptoMayor70 / response.data.totalJuegosHistoricos) *
+      100
+    ).toFixed(1)
+  )
 
   changeLevel()
   changeLevel1()
@@ -379,7 +388,7 @@ const changeLevel1 = () => {
 //Mostrar por modo tiempo promedio x nivel
 const changeLevel2 = () => {
   if (nivelSeleccionado2.value === '1') {
-    tituloLineChart.value = 'Modo Misión tiempo(minutos) promedio por niveles'
+    tituloLineChart.value = 'Modo Misión - Tiempo promedio por niveles'
     nivelesTiempo.value = [
       parametro.value.historicosPromedioTiempoPorNivel.basico,
       parametro.value.historicosPromedioTiempoPorNivel.intermedio,
@@ -387,7 +396,7 @@ const changeLevel2 = () => {
       parametro.value.historicosPromedioTiempoPorNivel.master,
     ]
   } else if (nivelSeleccionado2.value === '2') {
-    tituloLineChart.value = 'Modo Libre tiempo(minutos) promedio por niveles'
+    tituloLineChart.value = 'Modo Libre - Tiempo promedio por niveles'
     nivelesTiempo.value = [
       parametro.value.libresPromedioTiempoPorNivel.basico,
       parametro.value.libresPromedioTiempoPorNivel.intermedio,
@@ -395,7 +404,7 @@ const changeLevel2 = () => {
       parametro.value.libresPromedioTiempoPorNivel.master,
     ]
   } else {
-    tituloLineChart.value = 'Modo libre y misión tiempo(minutos) promedio por niveles'
+    tituloLineChart.value = 'Tiempo promedio por niveles'
     nivelesTiempo.value = [
       parametro.value.historicosPromedioTiempoPorNivel.basico +
         parametro.value.libresPromedioTiempoPorNivel.basico,
@@ -412,7 +421,7 @@ const changeLevel2 = () => {
 //Mostrar por area de conocimiento tiempo promedio x nivel
 const changeLevel3 = () => {
   if (AreaSeleccionado.value === '1') {
-    tituloLineChart1.value = 'Tiempo(Minutos) promedio en matemáticas según nivel de juego'
+    tituloLineChart1.value = 'Tiempo promedio en matemáticas'
     nivelesTiempo1.value = [
       parametro.value.promedioTiempoPorAreaNivel.matematicas.basico,
       parametro.value.promedioTiempoPorAreaNivel.matematicas.intermedio,
@@ -420,7 +429,7 @@ const changeLevel3 = () => {
       parametro.value.promedioTiempoPorAreaNivel.matematicas.master,
     ]
   } else if (AreaSeleccionado.value === '2') {
-    tituloLineChart1.value = 'Tiempo(Minutos) promedio en lenguaje según nivel de juego'
+    tituloLineChart1.value = 'Tiempo promedio en lenguaje'
     nivelesTiempo1.value = [
       parametro.value.promedioTiempoPorAreaNivel.lenguaje.basico,
       parametro.value.promedioTiempoPorAreaNivel.lenguaje.intermedio,
@@ -428,7 +437,7 @@ const changeLevel3 = () => {
       parametro.value.promedioTiempoPorAreaNivel.lenguaje.master,
     ]
   } else if (AreaSeleccionado.value === '3') {
-    tituloLineChart1.value = 'Tiempo(Minutos) promedio en ciencias según nivel de juego'
+    tituloLineChart1.value = 'Tiempo promedio en ciencias'
     nivelesTiempo1.value = [
       parametro.value.promedioTiempoPorAreaNivel.ciencias.basico,
       parametro.value.promedioTiempoPorAreaNivel.ciencias.intermedio,
@@ -436,8 +445,7 @@ const changeLevel3 = () => {
       parametro.value.promedioTiempoPorAreaNivel.ciencias.master,
     ]
   } else {
-    tituloLineChart1.value =
-      'Tiempo(Minutos) promedio en habilidades para la Vida según nivel de juego'
+    tituloLineChart1.value = 'Tiempo promedio en habilidades para la Vida'
     nivelesTiempo1.value = [
       parametro.value.promedioTiempoPorAreaNivel.habilidades_para_la_vida.basico,
       parametro.value.promedioTiempoPorAreaNivel.habilidades_para_la_vida.intermedio,

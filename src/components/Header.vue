@@ -88,7 +88,7 @@ const logout = async () => {
 };
 
 const getImage = function (name: string) {
-  return `https://api-licencias.bosingenieria.com/uploads/instituciones/${name}`;
+  return `https://api-licencias.azproyectoseducativos.com/uploads/instituciones/${name}`;
 
 };
 </script>

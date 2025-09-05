@@ -71,7 +71,8 @@
     >
       <div class="text-xl font-bold">Ranking de juegos</div>
       <p class="text-sm">
-        {{ parametro.totalJuegosConceptoMayor70 }} juegos con desempeño mayor o igual a 70
+        {{ parametro.totalJuegosConceptoMayor70 }} niveles completados por encima de 70% en
+        desempeño curricular
       </p>
       <div
         class="space-y-2 overflow-x-auto w-full mt-2"
@@ -81,7 +82,9 @@
           <thead>
             <tr class="bg-gray-2 text-left dark:bg-meta-4 px-4">
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">#</th>
-              <th class="py-2 px-2 font-medium text-black dark:text-white text-left">Juego</th>
+              <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+                Nombre del Juego
+              </th>
               <th class="py-2 px-4 font-medium text-black dark:text-white text-right">
                 Entrenamientos completados
               </th>
@@ -101,27 +104,27 @@
               </td>
               <td class="py-3 px-3 whitespace-nowrap text-right align-top">
                 <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Entrenamientos <br> completados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
+                  Niveles de juegos superados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
                 </p>
                 <!-- Barra de progreso dentro del mismo td -->
-                <div class="w-full flex items-center gap-2 mt-2" v-if="parametro.totalJuegosConceptoMayor70">
+                <div
+                  class="w-full flex items-center gap-2 mt-2"
+                  v-if="parametro.totalJuegosConceptoMayor70"
+                >
                   <div class="flex-1 bg-gray-300 dark:bg-gray-700 rounded h-4 overflow-hidden">
                     <div
                       class="h-4 rounded bg-blue-600 transition-all duration-300"
                       :style="{
                         width:
-                          (item.veces_jugado / (parametro.totalJuegosConceptoMayor70)) * 100 +
-                          '%',
+                          (item.veces_jugado / parametro.totalJuegosConceptoMayor70) * 100 + '%',
                       }"
-                    >{{ item.veces_jugado }}</div>
+                    >
+                      {{ item.veces_jugado }}
+                    </div>
                   </div>
                   <span class="text-xs text-gray-600 dark:text-gray-300 ml-2">
-                    
                     {{
-                      (
-                        (item.veces_jugado / parametro.totalJuegosConceptoMayor70) *
-                        100
-                      ).toFixed(1)
+                      ((item.veces_jugado / parametro.totalJuegosConceptoMayor70) * 100).toFixed(1)
                     }}%
                   </span>
                 </div>
@@ -144,9 +147,9 @@
           <thead>
             <tr class="bg-gray-2 text-left dark:bg-meta-4 px-4">
               <th class="py-2 px-2 font-medium text-black dark:text-white text-left">#</th>
-              <th class="py-2 px-2 font-medium text-black dark:text-white text-left">Juego</th>
+              <th class="py-2 px-2 font-medium text-black dark:text-white text-left">Nombre de Juego</th>
               <th class="py-2 px-4 font-medium text-black dark:text-white text-right">
-                Entrenamientos completados
+                Niveles de juegos superados
               </th>
             </tr>
           </thead>
@@ -161,31 +164,32 @@
               </td>
               <td class="py-3 px-3 whitespace-nowrap text-left align-top">
                 <p class="font-semibold">Locación: {{ item.locacion }}</p>
-              <p class="font-semibold">ambiente: {{ item.nombre }}</p>
+                <p class="font-semibold">ambiente: {{ item.nombre }}</p>
               </td>
               <td class="py-3 px-3 whitespace-nowrap text-right align-top">
                 <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Entrenamientos <br> completados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
+                  Entrenamientos <br />
+                  completados: <b class="text-blue-600">{{ item.veces_jugado }}</b>
                 </p>
                 <!-- Barra de progreso dentro del mismo td -->
-                <div class="w-full flex items-center gap-2 mt-2" v-if="parametro.totalJuegosConceptoMayor70">
+                <div
+                  class="w-full flex items-center gap-2 mt-2"
+                  v-if="parametro.totalJuegosConceptoMayor70"
+                >
                   <div class="flex-1 bg-gray-300 dark:bg-gray-700 rounded h-4 overflow-hidden">
                     <div
                       class="h-4 rounded bg-blue-600 transition-all duration-300"
                       :style="{
                         width:
-                          (item.veces_jugado / (parametro.totalJuegosConceptoMayor70)) * 100 +
-                          '%',
+                          (item.veces_jugado / parametro.totalJuegosConceptoMayor70) * 100 + '%',
                       }"
-                    >{{ item.veces_jugado }}</div>
+                    >
+                      {{ item.veces_jugado }}
+                    </div>
                   </div>
                   <span class="text-xs text-gray-600 dark:text-gray-300 ml-2">
-                    
                     {{
-                      (
-                        (item.veces_jugado / parametro.totalJuegosConceptoMayor70) *
-                        100
-                      ).toFixed(1)
+                      ((item.veces_jugado / parametro.totalJuegosConceptoMayor70) * 100).toFixed(1)
                     }}%
                   </span>
                 </div>
@@ -194,7 +198,6 @@
           </tbody>
         </table>
       </div>
-      
     </div>
   </div>
 </template>
@@ -215,7 +218,6 @@ const clientes = ref([])
 const clienteSeleccionado = ref<number | null>(0)
 
 const juegos = ref([])
-
 
 const parametro = ref<any>({})
 
@@ -239,13 +241,13 @@ const fetchAnalitica = async () => {
 }
 
 const getJuego = (codigo: string) => {
-  console.log('Buscando juego con código:', codigo);
-  
-  const ultimoSegmento = codigo.split('-').pop(); // Extrae el último segmento después de los guiones
-  
-  const juego = juegos.value.find((j: any) => j.codigo === ultimoSegmento);
+  console.log('Buscando juego con código:', codigo)
 
-  return juego ? juego.nombre : 'Desconocido';
+  const ultimoSegmento = codigo.split('-').pop() // Extrae el último segmento después de los guiones
+
+  const juego = juegos.value.find((j: any) => j.codigo === ultimoSegmento)
+
+  return juego ? juego.nombre : 'Desconocido'
 }
 
 const onClienteChange = () => {

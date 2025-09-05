@@ -582,13 +582,14 @@ const getInfoTotalDocente = async (id: number) => {
 
 const getEstudiantesActivos = async (id: number) => {
   try {
-    const response = await axios.get('/api/analitica/estudiantes-activos/', {
-      params: { cliente_id: id },
+    const response = await axios.get('/api/analitica/estudiantes-activos', {
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
         'X-CSRF-TOKEN': '', // Agrega el token CSRF si es necesario
       },
+      params: { cliente_id: id },
+      
     })
     console.log('estudiantes activos obtenidos:', response.data)
     estudiantesActivos.value = response.data
@@ -619,7 +620,7 @@ const getInitials = function (name: string) {
 }
 
 const getImage = function (name: string) {
-  return `https://api-licencias.bosingenieria.com/uploads/instituciones/${name}`
+  return `https://api-licencias.azproyectoseducativos.com/uploads/instituciones/${name}`
 }
 
 const currentPageInstituciones = ref(1)

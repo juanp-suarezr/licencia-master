@@ -3,22 +3,26 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
+      montserrat: ['Montserrat', 'sans-serif'],
     },
     extend: {
+      /* In the provided JavaScript code snippet, `c` is not defined or referenced anywhere. It seems
+      like there might be a typo or missing context in the code. If you can provide more information
+      or context about where `c` is used or intended to be used, I can help you understand its
+      purpose or functionality. */
       colors: {
         current: 'currentColor',
         transparent: 'transparent',
         white: '#FFFFFF',
-        black: '#1C2434',
-        'black-2': '#010101',
-        body: '#64748B',
-        bodydark: '#AEB7C0',
-        bodydark1: '#DEE4EE',
-        bodydark2: '#8A99AF',
-        primary: '#3C50E0',
-        secondary: '#80CAEE',
-        stroke: '#E2E8F0',
+        black: '#090E18', // Negro base nuevo
+        'black-2': '#1C2434', // Puede dejarse o reemplazar por un tono más profundo
+        body: '#576078', // Azul grisáceo
+        bodydark: '#8080FF', // Azul claro para resaltar
+        bodydark1: '#DEE4EE', // Mantengo blanco-gris claro
+        bodydark2: '#8A99AF', // Neutro intermedio
+        primary: '#8080FF', // Azul brillante (puede ser principal)
+        secondary: '#AA38EB', // Morado para acentos
+        stroke: '#E2E8F0', // Mantengo gris suave para bordes
         gray: '#EFF4FB',
         graydark: '#333A48',
         'gray-2': '#F7F9FC',
@@ -29,7 +33,7 @@ module.exports = {
         'boxdark-2': '#1A222C',
         strokedark: '#2E3A47',
         'form-strokedark': '#3d4d60',
-        'form-input': '#1d2a39',
+        'form-input': '#ADADAC', // Gris neutro definido en su nueva línea
         'meta-1': '#DC3545',
         'meta-2': '#EFF2F7',
         'meta-3': '#10B981',

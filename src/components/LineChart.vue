@@ -23,6 +23,7 @@ const props = defineProps<{
   labels: string[]
   values: number[]
   title?: string
+  titleY?: string
 }>()
 
 const darkModeStore = useDarkModeStore()
@@ -77,6 +78,12 @@ const chartOptions = computed(() => ({
       },
       grid: {
         color: darkModeStore.darkMode ? '#374151' : '#e5e7eb',
+      },
+      title: {
+        display: props.titleY != '' && props.titleY != null , // 👈 habilita el label
+        text: props.titleY, // 👈 el texto del eje Y
+        color: darkModeStore.darkMode ? '#e5e7eb' : '#1e293b',
+        font: { size: 16, weight: 'bold' },
       },
     },
   },

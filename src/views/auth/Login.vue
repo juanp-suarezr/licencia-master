@@ -3,7 +3,7 @@
     <div
       class="flex flex-col"
     >
-      <h4 class="mb-4">Bienvenido a licencia master! 👋🏻</h4>
+      <h4 class="mb-4">Bienvenido a Gestor Aplace to learn! 👋🏻</h4>
       <h1 class="text-2xl font-semibold mb-6 dark:text-white">Iniciar Sesión</h1>
       <form @submit.prevent="handleLogin" class="w-full max-w-sm">
         <div class="mb-4">

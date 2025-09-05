@@ -13,7 +13,7 @@ import Lara from '@/presets/lara'
 import Traduccion from './lang/en/prime_en.json'
 import './plugins/axios'
 import './assets/main.css'
-import './assets/satoshi.css'
+import './assets/montserrat.css'
 import Tooltip from 'primevue/tooltip'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import VueAwesomePaginate from "vue-awesome-paginate";

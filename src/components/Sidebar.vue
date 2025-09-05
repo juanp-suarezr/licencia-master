@@ -1,10 +1,10 @@
 <template>
   <div
     :class="['md:relative z-100 flex flex-col w-64 h-full overflow-y-auto bg-dark-2 dark:bg-boxdark shadow-lg gap-2 px-6 py-2', { 'hidden': !sidebarOpen, 'translate-x-0': sidebarOpen, 'md:block': true }]">
-    <div class="flex items-center justify-center h-16">
-      <router-link to="/" class="flex items-center">
-        <img src="../assets/logo/iconoAZWhite.png" alt="Logo" class="w-1/4 me-2" />
-        <h3 class="text-white text-title-sm">Licencia Master</h3>
+    <div class="flex items-center justify-center h-auto">
+      <router-link to="/" class="flex flex-col items-center">
+        <img src="../assets/logo/aplacetolearn.png" alt="Logo" class="w-full" />
+        <h3 class="font-bold text-white text-title-sm">Gestor de Aula</h3>
       </router-link>
     </div>
     <nav class="flex-1 mt-2 text-[14px]">
@@ -18,7 +18,7 @@
         <li>
           <router-link to="/" class="flex items-center gap-2 ps-4 py-1 text-white hover:!bg-slate-600"
             :class="{ '!bg-slate-600': isActiveDashboard('/') }">
-            <HomeModernIcon class="h-4 w-4" /> Dashboard
+            <HomeModernIcon class="h-4 w-4" /> Registros
           </router-link>
         </li>
         <!-- usuarios -->

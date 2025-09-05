@@ -23,7 +23,8 @@ export const useUserStore = defineStore('user_auth', {
         const accessToken = response.data.access_token
         const id_user = response.data.id_user
 
-
+        console.log(response.data);
+        
 
         sessionStorage.setItem('access_token', accessToken)
         sessionStorage.setItem('id_user', id_user)
