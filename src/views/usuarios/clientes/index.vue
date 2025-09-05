@@ -26,13 +26,13 @@
       <div class="w-auto gap-4">
         <a
           href="/clientes-create"
-          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md mr-2"
+          class="p-2 hover:scale-105 bg-boxdark text-white rounded-md shadow-md mr-2"
         >
           Nuevo cliente
         </a>
         <a
           href="/clientes-masivo"
-          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md"
+          class="p-2 hover:scale-105 bg-boxdark text-white rounded-md shadow-md"
         >
           Importar clientes
         </a>

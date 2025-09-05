@@ -23,13 +23,12 @@
     </select>
   </div>
 
-  <div class="w-full sm:grid sm:grid grid-cols-4 md:gap-4 sm:gap-2">
+  <div class="w-full sm:grid grid-cols-4 md:gap-4 sm:gap-2">
     <!-- Columna 1 Titulo general -->
     <div
       class="mb-4 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Desempeño promedio en juegos con banda conectada</div>
-      Total de juegos jugados con banda conectada:
+      <div class="text-xl font-bold mb-2">Total de juegos jugados con banda conectada</div>
       <span class="font-bold">{{ parametro.totalJuegosConBandaConectada }}</span>
     </div>
     <!-- Columna 1 Titulo desempeño por areas -->
@@ -41,14 +40,14 @@
         <!-- Libre -->
         <div class="flex items-center justify-center gap-2">
           <!-- cuadro color libre -->
-          <div class="w-full rounded-md shadow-xl bg-primary p-2 text-white">
+          <div class="w-full rounded-md shadow-xl bg-[#8080FF] p-2 text-white">
             <p>Concepto</p>
           </div>
         </div>
         <!-- Misión -->
         <div class="flex items-center justify-center gap-2">
           <!-- cuadro color misión -->
-          <div class="w-full rounded-md shadow-xl bg-success p-2 text-white">
+          <div class="w-full rounded-md shadow-xl bg-[#ea8665] p-2 text-white">
             <p>Carga Mental</p>
           </div>
         </div>
@@ -61,8 +60,9 @@
       <BarChart
         :labels="['Matemáticas', 'Lenguaje', 'Ciencias', 'Hab. para la vida']"
         :values="conceptoPromedio"
-        title="Concepto promedio por área"
-        :color="['#2563eb', '#1E40AF', '#3C50E0', '#1E80AE']"
+        title="Desempeño curricular promedio"
+        :color="['#c0b7f8', '#9d81fe', '#8062eb', '#250a7f']"
+        :percentage="true"
       />
     </div>
     <!-- Columna 2 carga mental promedio -->
@@ -72,19 +72,20 @@
       <BarChart
         :labels="['Matemáticas', 'Lenguaje', 'Ciencias', 'Hab. para la vida']"
         :values="cargaMentalPromedio"
-        title="Carga Mental promedio por área"
-        :color="['#16A34A', '#065F46', '#10B981', '#80B950']"
+        title="Carga mental promedio"
+        :color="['#e7a387', '#ea8766', '#ff986c', '#ffa07a']"
+        :percentage="true"
       />
     </div>
     <!-- Columna 3 Titulo desempeño por habilidades -->
-    <div
+    <!-- <div
       class="mb-2 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
       <div class="text-xl font-bold mb-2">Desempeño promedio en habilidades cognitivas</div>
 
       Total de juegos con desempeño igual o superior a 20% en habilidades cognitivas
       <span class="font-bold">{{ parametro.totalJuegosHabilidad }}</span>
-    </div>
+    </div> -->
     <!-- Columna 1 tabla  -->
     <div
       class="mb-4 col-span-2 w-full bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
@@ -96,7 +97,7 @@
               Habilidades cognitiva
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-right">
-              Numero de juegos superados
+              Niveles superados
             </th>
           </tr>
         </thead>
@@ -163,7 +164,8 @@
         :horizontal="true"
         :labels="['Atención', 'Memoria', 'Habilidad Espacial', 'Toma de decisiones',  'Flexibilidad cognitiva']"
         :values="habilidadCognitivaPromedio"
-        
+        :color="['#c0b7f8', '#9d81fe', '#8062eb', '#8080FF', '#250a7f']"
+        :percentage="true"
       />
     </div>
   </div>
