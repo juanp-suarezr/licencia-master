@@ -139,21 +139,31 @@
               <a
                 v-tooltip.bottom="'editar'"
                 :href="'/estudiantes-edit/' + item.id"
-                class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary/40 dark:text-white rounded-md shadow-md"
+                class="p-2 hover:scale-105 dark:bg-warning/20 bg-warning dark:text-white rounded-md shadow-md"
               >
                 <PencilSquareIcon class="h-4 w-4 text-gray" />
               </a>
+              <!-- generar pdf modo mision -->
               <button
-                v-tooltip.bottom="'generar PDF'"
+                v-tooltip.bottom="'generar PDF modo misión'"
                 @click="GenerarReporte(item.id)"
-                class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary/40 dark:text-white rounded-md shadow-md"
+                class="p-2 hover:scale-105 dark:bg-primary/20 bg-primary dark:text-white rounded-md shadow-md"
               >
                 <DocumentCheckIcon class="h-4 w-4 text-gray" />
               </button>
+              <!-- generar pdf modo libre -->
+              <button
+                v-tooltip.bottom="'generar PDF modo libre'"
+                @click="GenerarReporte1(item.id)"
+                class="p-2 hover:scale-105 dark:bg-secondary/20 bg-secondary dark:text-white rounded-md shadow-md"
+              >
+                <DocumentCheckIcon class="h-4 w-4 text-gray" />
+              </button>
+
               <button
                 v-tooltip.bottom="'eliminar'"
                 @click="eliminarDocente(item.id)"
-                class="p-2 hover:scale-105 dark:bg-danger/20 bg-danger/40 dark:text-white rounded-md shadow-md"
+                class="p-2 hover:scale-105 dark:bg-danger/20 bg-danger dark:text-white rounded-md shadow-md"
               >
                 <ArchiveBoxIcon class="h-4 w-4 text-gray" />
               </button>
@@ -309,7 +319,7 @@ const eliminarDocente = (id: number) => {
   ModalEliminar.value = true
 }
 
-//generar reporte PDF
+//generar reporte PDF modo misión
 const GenerarReporte = async (id: number) => {
   try {
     const response = await axios.get(`/api/analitica/reporte-individual/${id}`, {
@@ -324,7 +334,43 @@ const GenerarReporte = async (id: number) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `reporte_estudiante_${id}.pdf`)
+    link.setAttribute('download', `reporte_estudiante_${id}_modo_mision.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error('Error al generar el reporte:', error)
+    swal.fire({
+      icon: 'error',
+      title: 'Error al generar el reporte',
+      text: 'Ocurrió un error al intentar generar el reporte. Por favor, inténtalo de nuevo más tarde.',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  }
+}
+
+//generar reporte PDF modo libre
+const GenerarReporte1 = async (id: number) => {
+  try {
+    const response = await axios.get(`/api/analitica/individual-libre/${id}`, {
+      responseType: 'blob', // <-- Esto es clave para archivos
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/pdf',
+      },
+    })
+
+    // Crear un enlace temporal para descargar el PDF
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `reporte_estudiante_${id}_modo_libre.pdf`)
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
