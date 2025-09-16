@@ -28,7 +28,7 @@
     <div
       class="mb-4 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">Total de juegos jugados con banda conectada</div>
+      <div class="text-xl font-bold mb-2">Total de juegos intentados con Senzeband 2</div>
       <span class="font-bold">{{ parametro.totalJuegosConBandaConectada }}</span>
     </div>
     <!-- Columna 1 Titulo desempeño por areas -->

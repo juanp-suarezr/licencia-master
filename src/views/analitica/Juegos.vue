@@ -20,11 +20,20 @@
   </div>
 
   <div class="w-full sm:grid sm:grid grid-cols-4 md:gap-4 sm:gap-2">
+    <!-- Columna 0 Titulo general total -->
+    <div
+      class="mb-2 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-2 flex flex-col items-center"
+    >
+      <div class="text-xl font-bold mb-2">Total juegos realizados</div>
+      <div class="w-full px-4 flex flex-wrap justify-center gap-4 font-bold">
+        {{ parametro.totalJuegosLibres + parametro.totalJuegosHistoricos }}
+      </div>
+    </div>
     <!-- Columna 1 Titulo general -->
     <div
       class="mb-2 w-full col-span-4 bg-white dark:bg-graydark rounded-md shadow-md p-6 flex flex-col items-center"
     >
-      <div class="text-xl font-bold mb-2">“Niveles de juegos superados en %</div>
+      <div class="text-xl font-bold mb-2">Niveles de juegos superados en %</div>
       <div class="w-full px-4 flex flex-wrap justify-center gap-4">
         <!-- Libre -->
         <div class="flex items-center justify-center gap-2">
@@ -167,7 +176,7 @@
     >
       <div class="text-xl font-bold">Tiempo promedio de juego</div>
       <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">
-        “en niveles superados por encima del 70%
+        En niveles superados por encima del 70%
       </div>
       <select
         v-model="AreaSeleccionado"
