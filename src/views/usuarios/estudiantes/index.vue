@@ -3,7 +3,7 @@
     <breadcrumb-default pageTitle="Estudiantes"></breadcrumb-default>
   </div>
   <div class="w-full flex flex-wrap items-center sm:grid grid-cols-2 gap-2">
-    <!-- seleccionar cliente -->
+    <!-- seleccionar cliente (solo admin) -->
     <div
       v-if="user.rol == 'Administrador'"
       class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex flex-wrap items-center h-full gap-4"
@@ -20,6 +20,21 @@
         <option value="">Todos los clientes</option>
         <option v-for="item in infoClientes" :key="item.id" :value="item.id">
           {{ item.correo }} - {{ item.institucion }}
+        </option>
+      </select>
+    </div>
+    <!-- filtro por grupo (todos los roles) -->
+    <div class="dark:bg-graydark bg-white text-gray-500 p-4 rounded-md shadow-md flex flex-wrap items-center h-full gap-4">
+      <label for="gruposSelect" class="block text-sm font-medium text-gray-700 mb-1">Seleccione un grupo</label>
+      <select
+        id="gruposSelect"
+        v-model="grupo_id"
+        @change="actuByGrupo"
+        class="text-xs rounded-md bg-gray dark:bg-boxdark justify-end shadow-md p-2 w-[90%]"
+      >
+        <option value="">Todos los grupos</option>
+        <option v-for="grupo in infoGrupos" :key="grupo.id" :value="grupo.id">
+          {{ grupo.nombre_grupo }}
         </option>
       </select>
     </div>
@@ -249,6 +264,8 @@ const { user } = storeToRefs(userStore)
 const totalEstudiantes = ref(0)
 //info clientes
 const infoClientes = ref([])
+//info grupos
+const infoGrupos = ref([])
 // Modal
 const ModalEliminar = ref(false)
 //id a eliminar
@@ -258,6 +275,7 @@ const idEliminar = ref(0)
 const usuarios = ref([])
 const search = ref('')
 const cliente = ref(null)
+const grupo_id = ref('')
 const perPage = ref(5)
 const page = ref(1)
 const totalPages = ref(1)
@@ -275,8 +293,27 @@ const getTotales = async () => {
     console.log('Totales obtenidos:', response.data)
 
     infoClientes.value = response.data.instituciones
+    // No llenamos infoGrupos aquí, se llena dinámicamente según el cliente
   } catch (error) {
     console.error('Error al obtener totales:', error)
+  }
+}
+
+const cargarGruposPorCliente = async (clienteId: number | null) => {
+  try {
+    let response;
+    if (user.value && user.value.rol === 'Administrador') {
+      if (!clienteId) {
+        infoGrupos.value = [];
+        return;
+      }
+      response = await axios.get(`/api/grupos/cliente/admin/${clienteId}`);
+    } else {
+      response = await axios.get('/api/grupos/cliente');
+    }
+    infoGrupos.value = response.data.data || [];
+  } catch (error) {
+    infoGrupos.value = [];
   }
 }
 
@@ -285,10 +322,12 @@ const fetchUsuarios = async () => {
     params: {
       search: search.value,
       cliente: cliente.value,
+      grupo_id: grupo_id.value,
       per_page: perPage.value,
       page: page.value,
     },
   })
+  console.log('cliente seleccionado:', cliente.value)
   console.log('Usuarios obtenidos:', response.data.data)
   console.log('Total de páginas:', response.data.data.last_page)
 
@@ -305,10 +344,17 @@ const changePage = (newPage: number) => {
 const limpiar = () => {
   page.value = 0
   search.value = ''
+  grupo_id.value = ''
   fetchUsuarios()
 }
 
 const actuBycliente = () => {
+  page.value = 0
+  fetchUsuarios()
+  cargarGruposPorCliente(cliente.value)
+}
+
+const actuByGrupo = () => {
   page.value = 0
   fetchUsuarios()
 }
@@ -448,13 +494,44 @@ const checkCargaMasiva = async () => {
   try {
     const res = await axios.get('/api/notificacion-carga-estudiantes')
     if (res.data.completado) {
-      notificacion.value = res.data.mensaje
       if (polling) clearInterval(polling)
       localStorage.removeItem('cargaMasivaEnviada2') // Limpiar el estado de carga masiva
+
+      // Construir HTML detallado
+      let html = `<p><strong>Mensaje:</strong> ${res.data.mensaje}</p>`;
+      html += `<p><strong>Insertados:</strong> ${res.data.insertados}</p>`;
+      html += `<p><strong>Actualizados:</strong> ${res.data.actualizados}</p>`;
+      html += `<p><strong>Exitosos:</strong> ${res.data.exitosos}</p>`;
+  
+      if (Array.isArray(res.data.errores) && res.data.errores.length > 0) {
+        html += `<div style=\"margin-top:1em;\"><strong>Errores encontrados:</strong>`;
+        html += `<div style=\"overflow-x:auto; max-height:300px;\">`;
+        html += `<table style=\"width:100%; border-collapse:collapse; font-size:14px; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05);\">`;
+        html += `<thead style=\"background:#f3f4f6;\"><tr>`;
+        html += `<th style=\"padding:8px 12px; border-bottom:2px solid #e5e7eb; text-align:left;\">Fila</th>`;
+        html += `<th style=\"padding:8px 12px; border-bottom:2px solid #e5e7eb; text-align:left;\">Datos</th>`;
+        html += `<th style=\"padding:8px 12px; border-bottom:2px solid #e5e7eb; text-align:left;\">Errores</th>`;
+        html += `</tr></thead><tbody>`;
+        res.data.errores.forEach((err, idx) => {
+          html += `<tr style=\"background:${idx%2===0?'#f9fafb':'#fff'};\">`;
+          html += `<td style=\"padding:8px 12px; border-bottom:1px solid #e5e7eb; color:#1e293b; font-weight:600;\">${err.fila}</td>`;
+          html += `<td style="padding:8px 12px; border-bottom:1px solid #e5e7eb; color:#334155;">${(err.datos as string[]).map((d: string) => `<span>${d}</span>`).join(' <span style=\'color:#cbd5e1;\'>|</span> ')}</td>`;
+          html += `<td style="padding:8px 12px; border-bottom:1px solid #e5e7eb;">`;
+          html += `<ul style=\"margin:0; padding-left:18px;\">`;
+          err.errores.forEach(e => {
+            html += `<li style=\"color:#dc2626; margin-bottom:2px;\">${e}</li>`;
+          });
+          html += `</ul></td>`;
+          html += `</tr>`;
+        });
+        html += `</tbody></table></div></div>`;
+      }
+
       swal.fire({
-        icon: 'success',
+        icon: res.data.errores && res.data.errores.length > 0 ? 'warning' : 'success',
         title: 'Carga masiva completada',
-        html: `<p>${notificacion.value}</p>`,
+        html,
+        width: 1200,
         customClass: {
           popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
           title: 'dark:text-gray text-graydark',
@@ -483,13 +560,19 @@ const checkCargaMasiva = async () => {
 const iniciarPolling = () => {
   // Solo inicia el polling si se ha enviado el archivo (ajusta la condición)
   if (localStorage.getItem('cargaMasivaEnviada2') === 'true') {
-    polling = setInterval(checkCargaMasiva, 15000)
+    polling = setInterval(checkCargaMasiva, 3000)
   }
 }
 
 onMounted(() => {
   getTotales()
   fetchUsuarios()
+  // Cargar grupos según el rol y cliente seleccionado
+  if (user.value && user.value.rol === 'Administrador' && cliente.value) {
+    cargarGruposPorCliente(cliente.value)
+  } else {
+    cargarGruposPorCliente()
+  }
   iniciarPolling()
 })
 

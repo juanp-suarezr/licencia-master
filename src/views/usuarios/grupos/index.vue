@@ -74,6 +74,9 @@
               ID
             </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
+              CÓDIGO GRUPO
+            </th>
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-left">
               NOMBRE
             </th>
 
@@ -95,6 +98,11 @@
             <td class="py-3 px-3 whitespace-nowrap text-left">
               <h5 class="font-medium text-graydark dark:text-gray text-sm">
                 {{ index + 1 }}
+              </h5>
+            </td>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <h5 class="font-medium text-graydark dark:text-gray text-sm">
+                {{ item.id }}
               </h5>
             </td>
             <td class="py-3 px-3 whitespace-normal break-words text-left">
