@@ -108,10 +108,49 @@
         <option v-if="totalEstudiantes >= 16" :value="20">20</option>
       </select>
     </div>
+    
+    <!-- Barra de acciones masivas -->
+    <div v-if="seleccionados.length > 0" class="flex flex-wrap gap-3 items-center bg-blue-100 dark:bg-blue-900/40 border-l-4 border-blue-500 p-3 rounded-md mb-2 mt-4 mx-4 shadow-sm">
+      <span class="font-semibold text-sm text-blue-800 dark:text-blue-200">
+        {{ seleccionados.length }} estudiante(s) seleccionado(s)
+      </span>
+      <div class="flex gap-2 flex-wrap">
+        <button 
+          @click="mostrarModalEdicion = true" 
+          class="bg-green-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-green-700 transition-colors shadow-sm flex items-center gap-1"
+        >
+          <PencilSquareIcon class="h-4 w-4" />
+          Editar
+        </button>
+        <button 
+          @click="mostrarConfirmacionEliminar = true" 
+          class="bg-red-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-red-700 transition-colors shadow-sm flex items-center gap-1"
+        >
+          <ArchiveBoxIcon class="h-4 w-4" />
+          Eliminar
+        </button>
+        <button 
+          @click="limpiarSeleccion" 
+          class="bg-graydark text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-gray-600 transition-colors shadow-sm"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+    
     <div class="overflow-x-auto mt-4">
       <table class="table-auto w-full bg-white dark:bg-boxdark text-sm">
         <thead>
           <tr class="bg-gray-2 text-left dark:bg-meta-4">
+            <th class="py-2 px-2 font-medium text-black dark:text-white text-center w-12">
+              <input
+                type="checkbox"
+                :checked="seleccionados.length === usuarios.length && usuarios.length > 0"
+                @change="toggleSeleccionarTodos"
+                class="h-4 w-4 cursor-pointer"
+                aria-label="Seleccionar todos los estudiantes"
+              />
+            </th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">ID</th>
             <th class="py-2 px-2 font-medium text-black dark:text-white text-left">NOMBRE</th>
 
@@ -123,6 +162,15 @@
         </thead>
         <tbody v-if="usuarios.length != 0">
           <tr v-for="(item, index) in usuarios" :key="index" class="text-sm">
+            <td class="py-3 px-3 whitespace-nowrap text-center">
+              <input
+                type="checkbox"
+                :value="item.id"
+                v-model="seleccionados"
+                class="h-4 w-4 cursor-pointer"
+                aria-label="Seleccionar estudiante"
+              />
+            </td>
             <td class="py-3 px-3 whitespace-nowrap text-left">
               <h5 class="font-medium text-graydark dark:text-gray text-sm">
                 {{ index + 1 }}
@@ -190,6 +238,7 @@
             <td class="w-auto"></td>
             <td class="w-auto"></td>
             <td class="w-auto"></td>
+            <td class="w-auto"></td>
             <td class="w-auto flex justify-start items-center py-5">
               <em class="sm:text-xl">No hay registros</em>
             </td>
@@ -215,8 +264,8 @@
   <!-- Modal -->
   <Modal :isOpen="ModalEliminar" @close="closeModal">
     <div class="p-4 bg-white dark:bg-boxdark rounded-md shadow-md">
-      <h3 class="text-lg font-bold">Eliminar docente</h3>
-      <p class="text-sm mt-2">¿Estás seguro de eliminar este docente?</p>
+      <h3 class="text-lg font-bold">Eliminar estudiante</h3>
+      <p class="text-sm mt-2">¿Estás seguro de eliminar este estudiante?</p>
       <div class="flex justify-end mt-4 gap-2">
         <button
           @click="submitEliminar"
@@ -226,7 +275,103 @@
         </button>
         <button
           @click="ModalEliminar = false"
-          class="p-2 hover:scale-105 bg-gray dark:bg-graydark dark:text-white rounded-md shadow-md"
+          class="p-2 hover:scale-105 bg-graydark text-white rounded-md shadow-md"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </Modal>
+
+  <!-- Modal de Edición Masiva -->
+  <Modal :isOpen="mostrarModalEdicion" @close="cerrarModalEdicion">
+    <div class="p-6 bg-white dark:bg-boxdark rounded-md shadow-md w-full max-w-lg">
+      <h3 class="text-xl font-bold mb-4">Editar {{ seleccionados.length }} estudiante(s)</h3>
+      <form @submit.prevent="actualizarMasivo">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Grado (opcional)</label>
+          <select v-model="formData.grado" class="w-full p-2 rounded border dark:bg-graydark dark:border-gray-600">
+            <option value="">No cambiar</option>
+            <option v-for="n in 12" :key="n" :value="n">Grado {{ n }}</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Grupo (opcional)</label>
+          <select v-model="formData.grupo_id" class="w-full p-2 rounded border dark:bg-graydark dark:border-gray-600">
+            <option value="">No cambiar</option>
+            <option v-for="grupo in infoGrupos" :key="grupo.id" :value="grupo.id">
+              {{ grupo.nombre_grupo }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Edad (opcional)</label>
+          <input
+            type="number"
+            v-model="formData.edad"
+            min="3"
+            max="20"
+            placeholder="Entre 3 y 20 años"
+            class="w-full p-2 rounded border dark:bg-graydark dark:border-gray-600"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Nueva contraseña (opcional)</label>
+          <input
+            type="password"
+            v-model="formData.password"
+            minlength="8"
+            placeholder="Mínimo 8 caracteres"
+            class="w-full p-2 rounded border dark:bg-graydark dark:border-gray-600"
+          />
+        </div>
+        <div class="flex gap-2 mt-6">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors font-medium"
+            :disabled="loading"
+          >
+            {{ loading ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+          <button
+            type="button"
+            @click="cerrarModalEdicion"
+            class="bg-graydark text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors font-medium"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </Modal>
+
+  <!-- Modal de Confirmación de Eliminación Masiva -->
+  <Modal :isOpen="mostrarConfirmacionEliminar" @close="cancelarEliminacion">
+    <div class="p-6 bg-white dark:bg-boxdark rounded-md shadow-md w-full max-w-md">
+      <h3 class="text-xl font-bold mb-3">⚠️ Confirmar Eliminación</h3>
+      <p class="text-base mb-2">¿Está seguro de eliminar <strong>{{ seleccionados.length }}</strong> estudiante(s)?</p>
+      <div class="bg-red-50 dark:bg-red-900/20 p-3 rounded border border-red-200 dark:border-red-800 mt-3">
+        <p class="text-red-700 dark:text-red-300 text-sm font-semibold mb-2">
+          ⚠️ Esta acción es <strong>PERMANENTE</strong> y eliminará:
+        </p>
+        <ul class="text-red-600 dark:text-red-400 text-sm list-disc list-inside space-y-1">
+          <li>Datos del estudiante</li>
+          <li>Usuario asociado</li>
+          <li>Información de juego</li>
+          <li>Resultados de juegos</li>
+        </ul>
+      </div>
+      <div class="flex gap-2 mt-6">
+        <button
+          @click="confirmarEliminacion"
+          class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors font-medium"
+          :disabled="loading"
+        >
+          {{ loading ? 'Eliminando...' : 'Sí, eliminar' }}
+        </button>
+        <button
+          @click="cancelarEliminacion"
+          class="bg-graydark text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors font-medium"
         >
           Cancelar
         </button>
@@ -280,6 +425,18 @@ const perPage = ref(5)
 const page = ref(1)
 const totalPages = ref(1)
 const currentPage = ref(1)
+
+// Estados para edición y eliminación masiva
+const seleccionados = ref<number[]>([])
+const mostrarModalEdicion = ref(false)
+const mostrarConfirmacionEliminar = ref(false)
+const loading = ref(false)
+const formData = ref({
+  grado: '',
+  grupo_id: '',
+  edad: '',
+  password: ''
+})
 
 const getTotales = async () => {
   try {
@@ -489,6 +646,208 @@ const closeModal = () => {
   idEliminar.value = 0
 }
 
+// Funciones de selección masiva
+const toggleSeleccionarTodos = () => {
+  if (seleccionados.value.length === usuarios.value.length) {
+    seleccionados.value = []
+  } else {
+    seleccionados.value = usuarios.value.map((e: any) => e.id)
+  }
+}
+
+const limpiarSeleccion = () => {
+  seleccionados.value = []
+}
+
+const cerrarModalEdicion = () => {
+  mostrarModalEdicion.value = false
+  formData.value = { grado: '', grupo_id: '', edad: '', password: '' }
+}
+
+const cancelarEliminacion = () => {
+  mostrarConfirmacionEliminar.value = false
+}
+
+// Validación de formulario
+const validarFormulario = () => {
+  if (seleccionados.value.length === 0) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Sin selección',
+      text: 'Debe seleccionar al menos un estudiante',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return false
+  }
+  
+  if (formData.value.grado && (Number(formData.value.grado) < 1 || Number(formData.value.grado) > 12)) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Grado inválido',
+      text: 'El grado debe estar entre 1 y 12',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return false
+  }
+  
+  if (formData.value.edad && (Number(formData.value.edad) < 3 || Number(formData.value.edad) > 20)) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Edad inválida',
+      text: 'La edad debe estar entre 3 y 20 años',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return false
+  }
+  
+  if (formData.value.password && formData.value.password.length < 8) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Contraseña inválida',
+      text: 'La contraseña debe tener al menos 8 caracteres',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return false
+  }
+  
+  const hayDatos = formData.value.grado || formData.value.grupo_id || formData.value.edad || formData.value.password
+  if (!hayDatos) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Sin datos',
+      text: 'Debe ingresar al menos un campo para actualizar',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return false
+  }
+  
+  return true
+}
+
+// Actualización masiva
+const actualizarMasivo = async () => {
+  if (!validarFormulario()) return
+  
+  loading.value = true
+  try {
+    // Preparar datos solo con campos que tienen valor
+    const datos: any = {
+      estudiantes_ids: seleccionados.value
+    }
+    
+    if (formData.value.grado) datos.grado = Number(formData.value.grado)
+    if (formData.value.grupo_id) datos.grupo_id = Number(formData.value.grupo_id)
+    if (formData.value.edad) datos.edad = Number(formData.value.edad)
+    if (formData.value.password) datos.password = formData.value.password
+    
+    const response = await axios.post('/api/estudiantes/update-masivo', datos)
+    
+    // Construir mensaje de resultado
+    let mensaje = `${response.data.data.actualizados} estudiante(s) actualizado(s) correctamente`
+    
+    // Si hay errores parciales
+    if (response.data.data.errores && response.data.data.errores.length > 0) {
+      mensaje += `\n\n⚠️ ${response.data.data.fallidos} estudiante(s) no se pudo actualizar:\n`
+      mensaje += response.data.data.errores.join('\n')
+    }
+    
+    swal.fire({
+      icon: response.data.data.errores && response.data.data.errores.length > 0 ? 'warning' : 'success',
+      title: 'Actualización masiva',
+      text: mensaje,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    
+    await fetchUsuarios()
+    limpiarSeleccion()
+    cerrarModalEdicion()
+  } catch (error: any) {
+    swal.fire({
+      icon: 'error',
+      title: 'Error al actualizar',
+      text: error.response?.data?.message || 'Error inesperado al actualizar estudiantes',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+// Eliminación masiva
+const confirmarEliminacion = async () => {
+  loading.value = true
+  try {
+    const response = await axios.post('/api/estudiantes/delete-masivo', {
+      estudiantes_ids: seleccionados.value
+    })
+    
+    // Construir mensaje de resultado
+    let mensaje = `${response.data.data.eliminados} estudiante(s) eliminado(s) correctamente`
+    
+    // Si hay errores parciales
+    if (response.data.data.errores && response.data.data.errores.length > 0) {
+      mensaje += `\n\n⚠️ ${response.data.data.fallidos} estudiante(s) no se pudo eliminar:\n`
+      mensaje += response.data.data.errores.join('\n')
+    }
+    
+    swal.fire({
+      icon: response.data.data.errores && response.data.data.errores.length > 0 ? 'warning' : 'success',
+      title: 'Eliminación masiva',
+      text: mensaje,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    
+    await fetchUsuarios()
+    limpiarSeleccion()
+    cancelarEliminacion()
+  } catch (error: any) {
+    swal.fire({
+      icon: 'error',
+      title: 'Error al eliminar',
+      text: error.response?.data?.message || 'Error inesperado al eliminar estudiantes',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
 //check carga masiva
 const checkCargaMasiva = async () => {
   try {
@@ -571,7 +930,7 @@ onMounted(() => {
   if (user.value && user.value.rol === 'Administrador' && cliente.value) {
     cargarGruposPorCliente(cliente.value)
   } else {
-    cargarGruposPorCliente()
+    cargarGruposPorCliente(null)
   }
   iniciarPolling()
 })

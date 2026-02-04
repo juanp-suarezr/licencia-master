@@ -16,7 +16,7 @@
     </p>
     <button
       class="mt-4 p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md"
-      @click="descargarPlantilla"
+      @click="descargarPlantillaEstudiantes"
     >
       Descargar plantilla
     </button>
@@ -114,6 +114,53 @@ const descargarPlantilla = async () => {
   link.click()
   document.body.removeChild(link)
   window.URL.revokeObjectURL(url)
+}
+
+const descargarPlantillaEstudiantes = async () => {
+  try {
+    const response = await axios.get('/api/descargar-plantilla-estudiantes', {
+      responseType: 'blob' // Importante para archivos
+    })
+    
+    // Crear un enlace temporal para descargar
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'plantilla_estudiantes.xls')
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+    
+  } catch (error) {
+    console.error('Error al descargar la plantilla:', error)
+    
+    // Si el error es un blob, convertirlo a texto para leer el mensaje
+    let errorMessage = 'Ocurrió un error inesperado'
+    if (error.response?.data instanceof Blob) {
+      const text = await error.response.data.text()
+      try {
+        const errorData = JSON.parse(text)
+        errorMessage = errorData.message || errorData.error || errorMessage
+      } catch {
+        errorMessage = text || errorMessage
+      }
+    } else {
+      errorMessage = error.response?.data?.message || error.message || errorMessage
+    }
+    
+    swal.fire({
+      icon: 'error',
+      title: 'Error al descargar la plantilla',
+      text: errorMessage,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton:
+          'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  }
 }
 
 const cargarArchivo = async () => {
