@@ -462,14 +462,20 @@ const formData = ref({
 
 // Computed para obtener el ID del cliente según el rol
 const idClienteActual = computed(() => {
-  if (user.value && user.value.rol === 'Administrador') {
-    // Si es admin y ha seleccionado un cliente
+  if (!user.value) return null
+  
+  // Si es admin, usa el dropdown
+  if (user.value.rol === 'Administrador') {
     return cliente.value
-  } else if (user.value && user.value.cliente_id) {
-    // Si es docente u otro rol con cliente_id
-    return user.value.cliente_id
   }
-  return null
+  
+  // Si el rol es "Cliente", usar el campo "cliente" del usuario
+  if (user.value.rol === 'Cliente') {
+    return user.value.cliente
+  }
+  
+  // Para otros roles (Docente, etc.), tienen cliente_id
+  return user.value.cliente_id || user.value.clientes_id || user.value.clienteId || null
 })
 
 const getTotales = async () => {
@@ -912,12 +918,29 @@ const confirmarEliminacion = async () => {
 
 // Descarga de reporte Excel
 const descargarReporteExcel = async () => {
+  // Debug temporal para ver la estructura del usuario
+  console.log('📊 Debug reporte Excel:')
+  console.log('Usuario completo:', JSON.stringify(user.value, null, 2))
+  console.log('user.id:', user.value?.id)
+  console.log('user.cliente_id:', user.value?.cliente_id)
+  console.log('user.clientes:', user.value?.clientes)
+  console.log('idClienteActual (calculado):', idClienteActual.value)
+  console.log('cliente (dropdown):', cliente.value)
+  
   // Validar que haya un cliente seleccionado
   if (!idClienteActual.value) {
     swal.fire({
       icon: 'warning',
       title: 'Cliente no seleccionado',
-      text: 'Debe seleccionar un cliente para generar el reporte',
+      html: `
+        <p>No se pudo determinar el cliente para generar el reporte.</p>
+        <p class="text-sm text-gray-600 mt-2">
+          <strong>Info debug:</strong><br>
+          Rol: ${user.value?.rol || 'N/A'}<br>
+          User ID: ${user.value?.id || 'N/A'}<br>
+          Cliente ID: ${user.value?.cliente_id || 'No encontrado'}
+        </p>
+      `,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
