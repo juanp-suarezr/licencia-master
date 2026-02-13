@@ -77,7 +77,7 @@ import { defineProps } from 'vue';
 import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue';
 import Swal from 'sweetalert2';
 import Password from 'primevue/password';
-import { watch } from 'fs';
+import { watch } from 'vue';
 
 const swal = inject('$swal') as typeof Swal;
 

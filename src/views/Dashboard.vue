@@ -508,7 +508,6 @@ import Avatar from 'primevue/avatar'
 import { useUserStore } from '@/store/auth'
 import { storeToRefs } from 'pinia'
 import Knob from 'primevue/knob'
-import { get } from 'http'
 
 const userStore = useUserStore()
 const { isAuthenticated, user, error_user } = storeToRefs(userStore)

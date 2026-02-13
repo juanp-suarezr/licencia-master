@@ -60,10 +60,10 @@
   <div class="w-full mt-6 bg-white dark:bg-boxdark p-2 rounded-md shadow-md">
     <div class="flex flex-wrap justify-between items-center">
       <h2 class="mt-2 px-4 text-base">Estudiantes</h2>
-      <div class="w-auto gap-4">
+      <div class="w-auto gap-4 flex flex-wrap">
         <a
           href="/estudiantes-create"
-          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md mr-2"
+          class="p-2 hover:scale-105 bg-gray dark:bg-primary/20 dark:text-white rounded-md shadow-md"
         >
           Nuevo estudiante
         </a>
@@ -73,6 +73,15 @@
         >
           Importar estudiantes
         </a>
+        <button
+          @click="descargarReporteExcel"
+          :disabled="loadingReporteExcel || totalEstudiantes === 0"
+          v-tooltip.bottom="'Descargar reporte Excel con todos los juegos'"
+          class="p-2 hover:scale-105 bg-emerald-600 dark:bg-emerald-700 text-white rounded-md shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-all"
+        >
+          <DocumentArrowDownIcon class="h-5 w-5" />
+          {{ loadingReporteExcel ? 'Generando...' : 'Reporte Excel' }}
+        </button>
       </div>
     </div>
     <div class="mt-4 px-4 w-full flex flex-wrap justify-between items-center">
@@ -115,6 +124,15 @@
         {{ seleccionados.length }} estudiante(s) seleccionado(s)
       </span>
       <div class="flex gap-2 flex-wrap">
+        <button 
+          @click="descargarReporteExcel" 
+          :disabled="loadingReporteExcel"
+          v-tooltip.bottom="'Descargar Excel solo de seleccionados'"
+          class="bg-emerald-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <DocumentArrowDownIcon class="h-4 w-4" />
+          {{ loadingReporteExcel ? 'Generando...' : 'Excel' }}
+        </button>
         <button 
           @click="mostrarModalEdicion = true" 
           class="bg-green-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-green-700 transition-colors shadow-sm flex items-center gap-1"
@@ -381,12 +399,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, inject, onBeforeUnmount } from 'vue'
+import { ref, onMounted, inject, onBeforeUnmount, computed } from 'vue'
 import {
   AcademicCapIcon,
   ArchiveBoxIcon,
   PencilSquareIcon,
   DocumentCheckIcon,
+  DocumentArrowDownIcon,
 } from '@heroicons/vue/24/solid'
 import axios from '../../../plugins/axios'
 import { useUserStore } from '@/store/auth'
@@ -400,6 +419,8 @@ const swal = inject('$swal') as typeof Swal
 //polling y notificaciones
 const notificacion = ref<string | null>(null)
 let polling: ReturnType<typeof setInterval> | null = null
+let pollingStartTime: number | null = null
+const MAX_POLLING_TIME = 2 * 60 * 1000 // 2 minutos máximo
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -431,11 +452,24 @@ const seleccionados = ref<number[]>([])
 const mostrarModalEdicion = ref(false)
 const mostrarConfirmacionEliminar = ref(false)
 const loading = ref(false)
+const loadingReporteExcel = ref(false)
 const formData = ref({
   grado: '',
   grupo_id: '',
   edad: '',
   password: ''
+})
+
+// Computed para obtener el ID del cliente según el rol
+const idClienteActual = computed(() => {
+  if (user.value && user.value.rol === 'Administrador') {
+    // Si es admin y ha seleccionado un cliente
+    return cliente.value
+  } else if (user.value && user.value.cliente_id) {
+    // Si es docente u otro rol con cliente_id
+    return user.value.cliente_id
+  }
+  return null
 })
 
 const getTotales = async () => {
@@ -526,7 +560,7 @@ const eliminarDocente = (id: number) => {
 const GenerarReporte = async (id: number) => {
   try {
     const response = await axios.get(`/api/analitica/reporte-individual/${id}`, {
-      responseType: 'blob', // <-- Esto es clave para archivos
+      responseType: 'blob',
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/pdf',
@@ -542,12 +576,26 @@ const GenerarReporte = async (id: number) => {
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
-  } catch (error) {
-    console.error('Error al generar el reporte:', error)
+  } catch (error: any) {
+    console.error('Error al generar reporte PDF:', error)
+    
+    let mensajeError = 'Ocurrió un error al generar el reporte'
+    
+    // Intentar extraer mensaje del servidor
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text()
+        const errorData = JSON.parse(text)
+        mensajeError = errorData.error || errorData.message || mensajeError
+      } catch (e) {
+        // No se pudo parsear
+      }
+    }
+    
     swal.fire({
       icon: 'error',
       title: 'Error al generar el reporte',
-      text: 'Ocurrió un error al intentar generar el reporte. Por favor, inténtalo de nuevo más tarde.',
+      text: mensajeError,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
@@ -562,7 +610,7 @@ const GenerarReporte = async (id: number) => {
 const GenerarReporte1 = async (id: number) => {
   try {
     const response = await axios.get(`/api/analitica/individual-libre/${id}`, {
-      responseType: 'blob', // <-- Esto es clave para archivos
+      responseType: 'blob',
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/pdf',
@@ -578,12 +626,26 @@ const GenerarReporte1 = async (id: number) => {
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
-  } catch (error) {
-    console.error('Error al generar el reporte:', error)
+  } catch (error: any) {
+    console.error('Error al generar reporte PDF:', error)
+    
+    let mensajeError = 'Ocurrió un error al generar el reporte'
+    
+    // Intentar extraer mensaje del servidor
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text()
+        const errorData = JSON.parse(text)
+        mensajeError = errorData.error || errorData.message || mensajeError
+      } catch (e) {
+        // No se pudo parsear
+      }
+    }
+    
     swal.fire({
       icon: 'error',
       title: 'Error al generar el reporte',
-      text: 'Ocurrió un error al intentar generar el reporte. Por favor, inténtalo de nuevo más tarde.',
+      text: mensajeError,
       customClass: {
         popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
         title: 'dark:text-gray text-graydark',
@@ -848,12 +910,143 @@ const confirmarEliminacion = async () => {
   }
 }
 
+// Descarga de reporte Excel
+const descargarReporteExcel = async () => {
+  // Validar que haya un cliente seleccionado
+  if (!idClienteActual.value) {
+    swal.fire({
+      icon: 'warning',
+      title: 'Cliente no seleccionado',
+      text: 'Debe seleccionar un cliente para generar el reporte',
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+    return
+  }
+
+  loadingReporteExcel.value = true
+  
+  try {
+    // Construir URL
+    const url = `/api/analitica/reporte-excel-grupo/${idClienteActual.value}`
+    
+    // Agregar query params si hay estudiantes seleccionados
+    const params: any = {}
+    if (seleccionados.value.length > 0) {
+      params.estudiantes_ids = seleccionados.value.join(',')
+    }
+    
+    // Hacer petición con responseType: 'blob' (CRÍTICO)
+    const response = await axios.get(url, {
+      params,
+      responseType: 'blob',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      },
+    })
+    
+    // Crear blob
+    const blob = new Blob([response.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+    
+    // Crear enlace de descarga
+    const downloadUrl = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = downloadUrl
+    
+    // Nombre del archivo con fecha y hora
+    const fecha = new Date().toISOString().split('T')[0]
+    const hora = new Date().toTimeString().slice(0, 5).replace(':', '')
+    const numEstudiantes = seleccionados.value.length > 0 
+      ? `${seleccionados.value.length}_estudiantes` 
+      : 'todos_estudiantes'
+    link.download = `reporte_${numEstudiantes}_${fecha}_${hora}.xlsx`
+    
+    // Ejecutar descarga
+    document.body.appendChild(link)
+    link.click()
+    
+    // Limpiar
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(downloadUrl)
+    
+    // Notificar éxito
+    swal.fire({
+      icon: 'success',
+      title: 'Reporte generado',
+      text: `Excel descargado exitosamente con ${seleccionados.value.length > 0 ? seleccionados.value.length : 'todos los'} estudiantes`,
+      timer: 3000,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+      },
+    })
+    
+  } catch (error: any) {
+    console.error('Error al generar reporte Excel:', error)
+    
+    let mensajeError = 'Error al generar el reporte Excel'
+    
+    // Intentar extraer mensaje de error del blob
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text()
+        const errorData = JSON.parse(text)
+        mensajeError = errorData.error || errorData.message || mensajeError
+      } catch (e) {
+        // No se pudo parsear
+      }
+    } else if (error.response?.data?.error) {
+      mensajeError = error.response.data.error
+    } else if (error.response?.data?.message) {
+      mensajeError = error.response.data.message
+    }
+    
+    swal.fire({
+      icon: 'error',
+      title: 'Error al generar reporte',
+      text: mensajeError,
+      customClass: {
+        popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+        title: 'dark:text-gray text-graydark',
+        confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+      },
+    })
+  } finally {
+    loadingReporteExcel.value = false
+  }
+}
+
 //check carga masiva
 const checkCargaMasiva = async () => {
   try {
+    // Verificar timeout máximo
+    if (pollingStartTime && Date.now() - pollingStartTime > MAX_POLLING_TIME) {
+      if (polling) clearInterval(polling)
+      localStorage.removeItem('cargaMasivaEnviada2')
+      swal.fire({
+        icon: 'warning',
+        title: 'Tiempo de espera agotado',
+        text: 'La carga masiva está tomando más tiempo del esperado. Por favor, verifica el estado manualmente o contacta al administrador.',
+        customClass: {
+          popup: 'dark:bg-slate-900 dark:text-gray bg-white text-graydark',
+          title: 'dark:text-gray text-graydark',
+          confirmButton: 'bg-blue-800 rounded-md shadow-sm bg-gray dark:bg-primary/20 dark:text-white',
+        },
+      })
+      return
+    }
+
     const res = await axios.get('/api/notificacion-carga-estudiantes')
     if (res.data.completado) {
       if (polling) clearInterval(polling)
+      pollingStartTime = null
       localStorage.removeItem('cargaMasivaEnviada2') // Limpiar el estado de carga masiva
 
       // Construir HTML detallado
@@ -900,6 +1093,9 @@ const checkCargaMasiva = async () => {
       })
     }
   } catch (e) {
+    // Detener el polling en caso de error
+    if (polling) clearInterval(polling)
+    pollingStartTime = null
     localStorage.removeItem('cargaMasivaEnviada2') // Limpiar el estado de carga masiva
     // Manejo de error opcional
     swal.fire({
@@ -919,6 +1115,7 @@ const checkCargaMasiva = async () => {
 const iniciarPolling = () => {
   // Solo inicia el polling si se ha enviado el archivo (ajusta la condición)
   if (localStorage.getItem('cargaMasivaEnviada2') === 'true') {
+    pollingStartTime = Date.now()
     polling = setInterval(checkCargaMasiva, 3000)
   }
 }
